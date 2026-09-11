@@ -5,12 +5,12 @@
  * Conecta todo: login, render por rol, restauración de sesión.
  */
 
-import { ClienteService, PagoService, HistorialService, AuthService } from './services.js';
+/*import { ClienteService, PagoService, HistorialService, AuthService } from './services.js';
 import { generarClientesPrueba, StorageService } from './data.js';
 import { UIAdmin } from './ui-admin.js';
 import { URecepcion } from './ui-recepcion.js';
 import { UICliente } from './ui-cliente.js';
-import { ROLES, STORAGE_KEYS, PAGO_CONFIG } from './config.js';
+import { ROLES, STORAGE_KEYS, PAGO_CONFIG } from './config.js';*/
 
 
 
