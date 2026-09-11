@@ -187,4 +187,4 @@ export const FIREBASE_CONFIG = {
 };
 
 // Initialize Firebase
-const app = initializeApp(FIREBASE_CONFIG);
+//const app = initializeApp(FIREBASE_CONFIG);
