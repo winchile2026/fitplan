@@ -84,13 +84,22 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+/*const firebaseConfig = {
   apiKey: "AIzaSyDKGiEy5caX6yVT_-mTNvJCPs-LZV6xky0",
   authDomain: "fitplan-pro-chile.firebaseapp.com",
   projectId: "fitplan-pro-chile",
   storageBucket: "fitplan-pro-chile.firebasestorage.app",
   messagingSenderId: "538147870814",
   appId: "1:538147870814:web:1db481d80cf49c919b7ccf"
+};*/
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBBrM4T8D7sWsEcciMHiVKOLKm9M8XxYeQ",
+  authDomain: "fitplan-pro-64b78.firebaseapp.com",
+  projectId: "fitplan-pro-64b78",
+  storageBucket: "fitplan-pro-64b78.firebasestorage.app",
+  messagingSenderId: "285908919557",
+  appId: "1:285908919557:web:2228fec38090151f52c36c"
 };
 
 // Initialize Firebase
