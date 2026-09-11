@@ -1,0 +1,1646 @@
+/* ============================================
+   RESET Y BASE
+   ============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+}
+
+body {
+    background: #f0f5fa;
+    color: #1e2a3a;
+    padding: 1rem;
+}
+
+.container {
+    max-width: 1500px;
+    margin: 0 auto;
+}
+
+/* ============================================
+   LOGIN
+   ============================================ */
+.login-container {
+    max-width: 400px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 32px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.06);
+    display: none;
+}
+.login-container.active { display: block; }
+.login-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #1d5a7a;
+}
+.login-container label {
+    font-weight: 700;
+    display: block;
+    margin-top: 0.8rem;
+}
+.login-container input {
+    width: 100%;
+    padding: 0.7rem 1rem;
+    border-radius: 40px;
+    border: 2px solid #dce5ed;
+    margin-top: 0.3rem;
+}
+.login-container .btn {
+    width: 100%;
+    margin-top: 1.2rem;
+    justify-content: center;
+}
+.login-error {
+    color: #e74c3c;
+    text-align: center;
+    margin-top: 0.5rem;
+    display: none;
+}
+.login-hint {
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #7f8c8d;
+    text-align: center;
+}
+
+/* ============================================
+   USER INFO
+   ============================================ */
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 60px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+.rol-badge {
+    background: #1d5a7a;
+    color: white;
+    padding: 0.2rem 1rem;
+    border-radius: 60px;
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+.rol-badge.admin { background: #e67e22; }
+.rol-badge.recepcion { background: #27ae60; }
+.rol-badge.cliente { background: #3498db; }
+
+/* ============================================
+   TABS
+   ============================================ */
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    background: white;
+    padding: 0.4rem 0.8rem;
+    border-radius: 60px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+    margin-bottom: 1.8rem;
+    justify-content: center;
+}
+.tab-btn {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 60px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: #1d5a7a;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.tab-btn:hover { background: #eef4f9; }
+.tab-btn.active { background: #1d5a7a; color: white; }
+.tab-btn.role-admin { border-left: 3px solid #e67e22; }
+.tab-btn.role-recepcion { border-left: 3px solid #27ae60; }
+.tab-btn.role-cliente { border-left: 3px solid #3498db; }
+.tab-btn.pagar-cliente {
+    background: #27ae60 !important;
+    color: white !important;
+}
+.tab-btn.pagar-cliente.active { background: #1e8a4d !important; }
+
+/* ============================================
+   CARDS
+   ============================================ */
+.card {
+    background: white;
+    border-radius: 28px;
+    padding: 1.5rem;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+    margin-bottom: 1.8rem;
+}
+.card h2 {
+    font-size: 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 3px solid #eef4f9;
+    padding-bottom: 0.7rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+}
+.card h2 i { color: #e67e22; }
+
+/* ============================================
+   FORMULARIOS
+   ============================================ */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.8rem 1.2rem;
+}
+.form-grid label {
+    font-weight: 700;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: #1e3b4f;
+    font-size: 0.9rem;
+}
+.form-grid input,
+.form-grid select {
+    padding: 0.5rem 0.9rem;
+    border-radius: 40px;
+    border: 2px solid #dce5ed;
+    font-size: 0.9rem;
+    width: 100%;
+    background: white;
+}
+.form-grid input:focus,
+.form-grid select:focus {
+    border-color: #1d7a9c;
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(29, 122, 156, 0.1);
+}
+
+/* ============================================
+   BOTONES
+   ============================================ */
+.btn {
+    background: #1d5a7a;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 60px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+}
+.btn:hover { background: #144a66; transform: scale(1.02); }
+.btn-success { background: #27ae60; }
+.btn-success:hover { background: #1e8a4d; }
+.btn-danger { background: #e74c3c; }
+.btn-danger:hover { background: #c0392b; }
+.btn-warning { background: #f39c12; }
+.btn-warning:hover { background: #d68910; }
+.btn-limpiar { background: #95a5a6; }
+.btn-limpiar:hover { background: #7f8c8d; }
+.btn-logout { background: #e74c3c; }
+.btn-sm { padding: 0.2rem 1rem; font-size: 0.8rem; }
+
+/* ============================================
+   TABLAS
+   ============================================ */
+.scroll-container { max-height: 500px; overflow-y: auto; }
+.tabla-clientes {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.75rem;
+}
+.tabla-clientes th {
+    background: #eef4f9;
+    padding: 0.5rem 0.4rem;
+    text-align: left;
+    font-weight: 700;
+    color: #1d5a7a;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+.tabla-clientes td {
+    padding: 0.4rem;
+    border-bottom: 1px solid #eef4f9;
+    vertical-align: middle;
+}
+.tabla-clientes tr:hover { background: #f8fbfe; }
+.fila-vigente { background: #d4edda !important; }
+.fila-enmora { background: #f8d7da !important; }
+
+/* ============================================
+   ACCIONES
+   ============================================ */
+.acciones i {
+    margin: 0 3px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    padding: 0.2rem;
+}
+.acciones .fa-edit { color: #f39c12; }
+.acciones .fa-trash { color: #e74c3c; }
+.acciones .fa-sync-alt { color: #1d7a9c; }
+.acciones .fa-dollar-sign { color: #2ecc71; }
+.acciones .fa-print { color: #3498db; }
+.acciones .fa-undo { color: #9b59b6; }
+.acciones i:hover { transform: scale(1.2); }
+
+/* ============================================
+   MODALES
+   ============================================ */
+.modal-boleta {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+.modal-boleta.active { display: flex; }
+.modal-boleta .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+}
+
+/* ============================================
+   PLANES / OFERTAS
+   ============================================ */
+.oferta-card {
+    background: #f8fbfe;
+    border-radius: 16px;
+    padding: 1.2rem;
+    border: 2px solid #eef4f9;
+    transition: all 0.3s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+.oferta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: #1d5a7a;
+}
+.oferta-card .plan-nombre {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #0b2b44;
+}
+.oferta-card .precio {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1d5a7a;
+}
+.oferta-card .btn-comprar-plan {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.5rem;
+    border-radius: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.95rem;
+    margin-top: 0.5rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.oferta-card .btn-comprar-plan:hover {
+    background: #d35400;
+    transform: scale(1.02);
+}
+
+/* ============================================
+   CAMPO PLAN SELECCIONADO (verde)
+   ============================================ */
+.campo-plan-seleccionado {
+    background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+    padding: 1rem 1.2rem;
+    border-radius: 20px;
+    border-left: 6px solid #27ae60;
+    display: none;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 4px 15px rgba(39, 174, 96, 0.15);
+    margin-bottom: 1rem;
+}
+.campo-plan-seleccionado.visible { display: flex; }
+.campo-plan-seleccionado .icono-plan {
+    font-size: 2.2rem;
+    color: #27ae60;
+    background: white;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.campo-plan-seleccionado .label-plan {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #1e5a3a;
+    text-transform: uppercase;
+}
+.campo-plan-seleccionado .nombre-plan {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #0b2b44;
+}
+.campo-plan-seleccionado .precio-plan {
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #27ae60;
+}
+
+/* ============================================
+   CAMPO PLAN ACTUAL (azul)
+   ============================================ */
+.campo-plan-actual {
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    padding: 1rem 1.2rem;
+    border-radius: 20px;
+    border-left: 6px solid #1976d2;
+    display: none;
+    margin-bottom: 1rem;
+}
+.campo-plan-actual.visible { display: block; }
+.campo-plan-actual .header-plan-actual {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.8rem;
+}
+.campo-plan-actual .icono-plan-actual {
+    font-size: 1.8rem;
+    color: #1976d2;
+    background: white;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.campo-plan-actual .titulo-plan-actual {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #0d47a1;
+    text-transform: uppercase;
+}
+.campo-plan-actual .plan-item-cliente {
+    background: white;
+    padding: 0.7rem 1rem;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #27ae60;
+}
+.campo-plan-actual .plan-numero {
+    background: #27ae60;
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+}
+.campo-plan-actual .plan-info-item { flex: 1; }
+.campo-plan-actual .plan-nombre-item {
+    font-weight: 700;
+    color: #0b2b44;
+}
+.campo-plan-actual .plan-precio-item {
+    font-weight: 900;
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+/* ============================================
+   SIN PLAN MENSAJE
+   ============================================ */
+.sin-plan-mensaje {
+    background: #fff3cd;
+    padding: 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #f39c12;
+    color: #856404;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* ============================================
+   MÉTODOS DE PAGO
+   ============================================ */
+.metodo-pago {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.6rem 1.2rem;
+    border-radius: 40px;
+    background: #eef4f9;
+    margin: 0.2rem;
+    cursor: pointer;
+    font-weight: 600;
+    color: #1d5a7a;
+    border: 2px solid transparent;
+}
+.metodo-pago.seleccionado {
+    background: #1d5a7a;
+    color: white;
+    border-color: #144a66;
+}
+
+/* ============================================
+   DASHBOARD
+   ============================================ */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+.dashboard-card {
+    background: #f8fbfe;
+    border-radius: 20px;
+    padding: 1.2rem;
+    text-align: center;
+    border: 2px solid #eef4f9;
+    cursor: pointer;
+}
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+.dashboard-card .numero {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1d5a7a;
+}
+.dashboard-card .label {
+    font-size: 0.85rem;
+    color: #4f6b7c;
+    font-weight: 600;
+}
+.dashboard-card .icono {
+    font-size: 1.8rem;
+    color: #e67e22;
+    margin-bottom: 4px;
+}
+.dashboard-card.rojo {
+    background: #f8d7da;
+    border-color: #e74c3c;
+}
+
+/* ============================================
+   HISTORIAL
+   ============================================ */
+.tabla-historial {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+.tabla-historial th {
+    background: #eef4f9;
+    padding: 0.7rem;
+    text-align: left;
+    font-weight: 700;
+    color: #1d5a7a;
+}
+.tabla-historial td {
+    padding: 0.6rem;
+    border-bottom: 1px solid #eef4f9;
+    font-size: 14px;
+}
+.campo-cambiado { color: #e74c3c; font-weight: 700; }
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 600px) {
+    .header h1 { font-size: 1.8rem; }
+    .tab-btn { padding: 0.3rem 0.6rem; font-size: 0.7rem; }
+    .form-grid { grid-template-columns: 1fr; }
+    .tabla-clientes { font-size: 0.6rem; }
+    .dashboard-grid { grid-template-columns: 1fr 1fr; }
+}
+
+
+
+/* ============================================
+   MENSAJE ANIMADO DE ÁNIMO
+   ============================================ */
+.mensaje-animo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 1rem;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    animation: fadeInDown 0.8s ease, pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+.mensaje-animo h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+}
+
+.mensaje-animo p {
+    opacity: 0.9;
+    font-size: 1rem;
+}
+
+.mensaje-animo .emoji {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.3rem;
+    animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* ============================================
+   PAGOS CLIENTE (12 MESES)
+   ============================================ */
+.pagos-cliente {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 0.5rem;
+    margin: 0.5rem 0;
+}
+
+.pago-card {
+    background: #f8fbfe;
+    border-radius: 12px;
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+    border: 2px solid #eef4f9;
+    font-size: 0.75rem;
+    transition: transform 0.2s;
+}
+
+.pago-card.pagado {
+    border-color: #27ae60;
+    background: #e8f5e9;
+}
+
+.pago-card.no-pagado {
+    border-color: #e74c3c;
+    background: #f8d7da;
+    animation: alertaRoja 1.5s infinite;
+}
+
+@keyframes alertaRoja {
+    0%, 100% { 
+        border-color: #e74c3c;
+        box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.6);
+    }
+    50% { 
+        border-color: #c0392b;
+        box-shadow: 0 0 0 8px rgba(231, 76, 60, 0);
+    }
+}
+
+.pago-card .mes {
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+}
+
+.pago-card .estado-pago {
+    font-size: 0.75rem;
+    margin-top: 0.1rem;
+}
+
+
+
+
+
+
+
+
+
+/* ============================================
+   SE AGREGA AL FINAL DE ESTE ARCHIVO
+   ============================================ */
+
+
+/* ============================================
+   MODAL DE DETALLE DE PLAN
+   ============================================ */
+.modal-plan {
+    display: none;
+    position: fixed;
+    z-index: 1002;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-plan.active { display: flex; }
+
+.modal-plan .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-plan .close-modal {
+    position: sticky;
+    top: 0;
+    float: right;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.modal-plan .modal-header-plan {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #eef4f9;
+}
+
+.modal-plan .modal-header-plan .icono-plan-modal {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-plan .modal-header-plan h3 {
+    color: #0b2b44;
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.modal-plan .modal-header-plan .precio-modal {
+    color: #e67e22;
+    font-weight: 900;
+    font-size: 1.6rem;
+    margin-top: 4px;
+}
+
+.modal-plan h4 {
+    color: #1d5a7a;
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.8rem 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #eef4f9;
+    padding-bottom: 0.5rem;
+}
+
+/* ============================================
+   LISTA DE EJERCICIOS EN MODAL
+   ============================================ */
+.lista-ejercicios-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.ejercicio-modal {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.9rem;
+    background: #f8fbfe;
+    border-radius: 12px;
+    border-left: 4px solid #1d5a7a;
+    transition: all 0.2s;
+}
+
+.ejercicio-modal:hover {
+    transform: translateX(4px);
+    background: #eef4f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ejercicio-modal img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    background: white;
+    border-radius: 10px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.ejercicio-modal .info-ej-modal {
+    flex: 1;
+    min-width: 0;
+}
+
+.ejercicio-modal .info-ej-modal .nombre-ej {
+    font-weight: 800;
+    color: #0b2b44;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ejercicio-modal .info-ej-modal .detalle-ej {
+    font-size: 0.75rem;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.ejercicio-modal .repeticiones-badge {
+    background: #fef9e7;
+    color: #e67e22;
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 40px;
+    min-width: 70px;
+    text-align: center;
+    border: 2px solid #f39c12;
+    flex-shrink: 0;
+}
+
+.ejercicio-modal .btn-youtube-modal {
+    color: #ff0000;
+    font-size: 1.8rem;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.ejercicio-modal .btn-youtube-modal:hover {
+    transform: scale(1.2);
+    background: rgba(255, 0, 0, 0.1);
+}
+
+/* ============================================
+   LISTA DE COMIDAS EN MODAL
+   ============================================ */
+.lista-comidas-modal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+}
+
+.comida-modal {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #f39c12;
+    transition: all 0.2s;
+}
+
+.comida-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.2);
+}
+
+.comida-modal .nombre-comida {
+    font-weight: 800;
+    color: #856404;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.comida-modal .nombre-comida i {
+    color: #e67e22;
+    margin-right: 4px;
+}
+
+.comida-modal .detalle-comida {
+    font-size: 0.85rem;
+    color: #5a4a00;
+    line-height: 1.6;
+}
+
+/* ============================================
+   EJERCICIOS EN MI PLAN (cliente)
+   ============================================ */
+.ejercicio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.5rem;
+    border-bottom: 1px solid #eef4f9;
+    border-radius: 12px;
+    transition: background 0.15s;
+    cursor: pointer;
+}
+
+.ejercicio-item:hover {
+    background: #eef4f9;
+    transform: translateX(4px);
+}
+
+.ejercicio-item img {
+    width: 55px;
+    height: 55px;
+    object-fit: contain;
+    border-radius: 12px;
+    background: white;
+    padding: 4px;
+    border: 2px solid #eef4f9;
+    flex-shrink: 0;
+}
+
+.ejercicio-item .ejercicio-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ejercicio-item .ejercicio-info strong {
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #0b2b44;
+    margin-bottom: 2px;
+}
+
+.ejercicio-item .ejercicio-info .detalle-ej {
+    font-size: 0.75rem;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.ejercicio-item .repeticion-grande {
+    background: #fef9e7;
+    color: #e67e22;
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 40px;
+    min-width: 70px;
+    text-align: center;
+    border: 2px solid #f39c12;
+    flex-shrink: 0;
+}
+
+.ejercicio-item .btn-youtube-grande {
+    color: #ff0000;
+    font-size: 1.8rem;
+    padding: 0.3rem;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.ejercicio-item .btn-youtube-grande:hover {
+    transform: scale(1.2);
+}
+
+/* ============================================
+   COMIDAS EN MI PLAN (cliente)
+   ============================================ */
+.comidas-cliente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.comida-cliente {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #f39c12;
+}
+
+.comida-cliente .nombre-comida {
+    font-weight: 800;
+    color: #856404;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+}
+
+.comida-cliente .detalle-comida {
+    font-size: 0.85rem;
+    color: #5a4a00;
+    line-height: 1.6;
+}
+
+/* ============================================
+   BOTÓN DETALLE EN OFERTAS
+   ============================================ */
+.oferta-card .btn-ver-detalle {
+    background: #1d5a7a;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.oferta-card .btn-ver-detalle:hover {
+    background: #144a66;
+    transform: scale(1.02);
+}
+
+@media (max-width: 600px) {
+    .modal-plan .modal-content {
+        padding: 1rem;
+    }
+    
+    .ejercicio-modal {
+        flex-wrap: wrap;
+    }
+    
+    .ejercicio-modal .repeticiones-badge {
+        min-width: 60px;
+        font-size: 0.85rem;
+    }
+    
+    .lista-comidas-modal {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+
+
+
+
+
+/* ============================================
+   MODAL DE DETALLE DE PLAN
+   ============================================ */
+.modal-plan {
+    display: none;
+    position: fixed;
+    z-index: 1002;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-plan.active { display: flex; }
+
+.modal-plan .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-plan .close-modal {
+    position: sticky;
+    top: 0;
+    float: right;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.modal-plan .modal-header-plan {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #eef4f9;
+}
+
+.modal-plan .modal-header-plan .icono-plan-modal {
+    font-size: 2.5rem;
+    background: linear-gradient(135deg, #e67e22, #d35400);
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.modal-plan .modal-header-plan h3 {
+    color: #0b2b44;
+    font-size: 1.4rem;
+    margin: 0;
+}
+
+.modal-plan .modal-header-plan .precio-modal {
+    color: #e67e22;
+    font-weight: 900;
+    font-size: 1.6rem;
+    margin-top: 4px;
+}
+
+.modal-plan h4 {
+    color: #1d5a7a;
+    font-size: 1.1rem;
+    margin: 1.5rem 0 0.8rem 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 2px solid #eef4f9;
+    padding-bottom: 0.5rem;
+}
+
+.lista-ejercicios-modal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.ejercicio-modal {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.7rem 0.9rem;
+    background: #f8fbfe;
+    border-radius: 12px;
+    border-left: 4px solid #1d5a7a;
+    transition: all 0.2s;
+}
+
+.ejercicio-modal:hover {
+    transform: translateX(4px);
+    background: #eef4f9;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.ejercicio-modal img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    background: white;
+    border-radius: 10px;
+    padding: 4px;
+    flex-shrink: 0;
+}
+
+.ejercicio-modal .info-ej-modal {
+    flex: 1;
+    min-width: 0;
+}
+
+.ejercicio-modal .info-ej-modal .nombre-ej {
+    font-weight: 800;
+    color: #0b2b44;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ejercicio-modal .info-ej-modal .detalle-ej {
+    font-size: 0.75rem;
+    color: #7f8c8d;
+    font-weight: 600;
+}
+
+.ejercicio-modal .repeticiones-badge {
+    background: #fef9e7;
+    color: #e67e22;
+    font-weight: 900;
+    font-size: 1rem;
+    padding: 0.4rem 0.9rem;
+    border-radius: 40px;
+    min-width: 70px;
+    text-align: center;
+    border: 2px solid #f39c12;
+    flex-shrink: 0;
+}
+
+.ejercicio-modal .btn-youtube-modal {
+    color: #ff0000;
+    font-size: 1.8rem;
+    padding: 0.3rem;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+    cursor: pointer;
+}
+
+.ejercicio-modal .btn-youtube-modal:hover {
+    transform: scale(1.2);
+    background: rgba(255, 0, 0, 0.1);
+}
+
+.lista-comidas-modal {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+}
+
+.comida-modal {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #f39c12;
+    transition: all 0.2s;
+}
+
+.comida-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(243, 156, 18, 0.2);
+}
+
+.comida-modal .nombre-comida {
+    font-weight: 800;
+    color: #856404;
+    font-size: 0.95rem;
+    display: block;
+    margin-bottom: 0.4rem;
+}
+
+.comida-modal .nombre-comida i {
+    color: #e67e22;
+    margin-right: 4px;
+}
+
+.comida-modal .detalle-comida {
+    font-size: 0.85rem;
+    color: #5a4a00;
+    line-height: 1.6;
+}
+
+.comidas-cliente-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0.8rem;
+    margin-top: 0.5rem;
+}
+
+.comida-cliente {
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    padding: 0.9rem 1rem;
+    border-radius: 12px;
+    border-left: 4px solid #f39c12;
+}
+
+.comida-cliente .nombre-comida {
+    font-weight: 800;
+    color: #856404;
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+}
+
+.comida-cliente .detalle-comida {
+    font-size: 0.85rem;
+    color: #5a4a00;
+    line-height: 1.6;
+}
+
+.oferta-card .btn-ver-detalle {
+    background: #1d5a7a;
+    color: white;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 40px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 0.4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: 0.2s;
+}
+
+.oferta-card .btn-ver-detalle:hover {
+    background: #144a66;
+    transform: scale(1.02);
+}
+
+
+
+
+
+/* ============================================
+   MENSAJE DE ÁNIMO MEJORADO (MÁS ANIMADO)
+   ============================================ */
+.mensaje-animo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 2rem 1.5rem;
+    border-radius: 24px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+    position: relative;
+    overflow: hidden;
+    animation: mensajeEntrada 0.9s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* Efecto de brillo diagonal */
+.mensaje-animo::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.15) 50%,
+        transparent 70%
+    );
+    animation: brilloDiagonal 3s infinite;
+    pointer-events: none;
+}
+
+@keyframes brilloDiagonal {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes mensajeEntrada {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-30px);
+    }
+    60% {
+        opacity: 1;
+        transform: scale(1.05) translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.mensaje-animo .emoji {
+    font-size: 3.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+    animation: emojiFlotante 2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+@keyframes emojiFlotante {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    25% { transform: translateY(-12px) rotate(-8deg); }
+    50% { transform: translateY(-8px) rotate(0deg); }
+    75% { transform: translateY(-12px) rotate(8deg); }
+}
+
+.mensaje-animo h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    animation: latidoTexto 1.8s ease-in-out infinite;
+}
+
+@keyframes latidoTexto {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.mensaje-animo .frase-poderosa {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    opacity: 0.95;
+    font-weight: 600;
+    font-style: italic;
+    margin: 0.8rem auto;
+    max-width: 500px;
+    padding: 0.8rem 1rem;
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 16px;
+    border-left: 4px solid #ffd700;
+    border-right: 4px solid #ffd700;
+    animation: fraseAparece 1.2s ease 0.3s both;
+}
+
+@keyframes fraseAparece {
+    0% {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.mensaje-animo .frase-poderosa::before {
+    content: '❝ ';
+    font-size: 1.3rem;
+    color: #ffd700;
+    margin-right: 4px;
+}
+
+.mensaje-animo .frase-poderosa::after {
+    content: ' ❞';
+    font-size: 1.3rem;
+    color: #ffd700;
+    margin-left: 4px;
+}
+
+.mensaje-animo .sub-frase {
+    font-size: 0.9rem;
+    opacity: 0.85;
+    margin-top: 0.8rem;
+    font-weight: 500;
+}
+
+/* Partículas flotantes decorativas */
+.mensaje-animo .particulas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.mensaje-animo .particulas span {
+    position: absolute;
+    font-size: 1.2rem;
+    opacity: 0.6;
+    animation: flotarArriba 6s linear infinite;
+}
+
+.mensaje-animo .particulas span:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+}
+.mensaje-animo .particulas span:nth-child(2) {
+    left: 30%;
+    animation-delay: 1.5s;
+}
+.mensaje-animo .particulas span:nth-child(3) {
+    left: 50%;
+    animation-delay: 3s;
+}
+.mensaje-animo .particulas span:nth-child(4) {
+    left: 70%;
+    animation-delay: 4.5s;
+}
+.mensaje-animo .particulas span:nth-child(5) {
+    left: 90%;
+    animation-delay: 2.2s;
+}
+
+@keyframes flotarArriba {
+    0% {
+        bottom: -20px;
+        opacity: 0;
+        transform: translateX(0);
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        bottom: 110%;
+        opacity: 0;
+        transform: translateX(20px);
+    }
+}
+
+/* ============================================
+   MODAL DE EDICIÓN DE CLIENTE
+   ============================================ */
+.modal-editar-cliente {
+    display: none;
+    position: fixed;
+    z-index: 1003;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-editar-cliente.active { display: flex; }
+
+.modal-editar-cliente .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.modal-editar-cliente h3 {
+    color: #1d5a7a;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 3px solid #eef4f9;
+    padding-bottom: 0.6rem;
+}
+
+.modal-editar-cliente .close-modal {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #e74c3c;
+    color: white;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 10;
+    transition: 0.2s;
+}
+
+.modal-editar-cliente .close-modal:hover {
+    transform: scale(1.1);
+    background: #c0392b;
+}
+
+/* ============================================
+   MODAL BOLETA CLIENTE
+   ============================================ */
+.modal-boleta-cliente {
+    display: none;
+    position: fixed;
+    z-index: 1004;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.25s ease;
+}
+
+.modal-boleta-cliente.active { display: flex; }
+
+.modal-boleta-cliente .modal-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    border-top: 8px solid #27ae60;
+}
+
+.modal-boleta-cliente .boleta-header {
+    text-align: center;
+    padding-bottom: 1rem;
+    border-bottom: 2px dashed #dce5ed;
+    margin-bottom: 1rem;
+}
+
+.modal-boleta-cliente .boleta-header .icono-pago {
+    font-size: 3rem;
+    color: #27ae60;
+    margin-bottom: 0.5rem;
+    animation: bouncePago 1s infinite;
+}
+
+@keyframes bouncePago {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.modal-boleta-cliente .boleta-header h3 {
+    color: #27ae60;
+    font-size: 1.5rem;
+}
+
+.modal-boleta-cliente .boleta-info {
+    background: #f8fbfe;
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.modal-boleta-cliente .boleta-info p {
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #eef4f9;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+}
+
+.modal-boleta-cliente .boleta-info p:last-child {
+    border-bottom: none;
+}
+
+.modal-boleta-cliente .boleta-info p strong {
+    color: #1d5a7a;
+}
+
+.modal-boleta-cliente .boleta-total {
+    background: linear-gradient(135deg, #27ae60, #1e8a4d);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 900;
+    margin: 1rem 0;
+    box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
+}
+
+.modal-boleta-cliente .boleta-footer {
+    text-align: center;
+    padding-top: 1rem;
+    border-top: 2px dashed #dce5ed;
+    color: #7f8c8d;
+    font-size: 0.8rem;
+}
