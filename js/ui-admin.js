@@ -905,7 +905,7 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
                     <div class="lista-ejercicios-modal">
                         ${ejercicios.map(ej => `
                             <div class="ejercicio-modal">
-                                <img src="${ej.img}" alt="${ej.nombre}" onerror="this.src='https://via.placeholder.com/50'">
+                                <img src="${ej.img}" alt="${ej.nombre}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgdmlld0JveD0iMCAwIDUwIDUwIj48cmVjdCB3aWR0aD0iNTAiIGhlaWdodD0iNTAiIGZpbGw9IiNlZWY0ZjkiLz48dGV4dCB4PSIyNSIgeT0iMjUiIGZvbnQtc2l6ZT0iMjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIiBmaWxsPSIjN2Y4YzhkIj7imIU8L3RleHQ+PC9zdmc+'">
                                 <div class="info-ej-modal">
                                     <span class="nombre-ej">${ej.nombre}</span>
                                     <span class="detalle-ej">${ej.detalle}</span>
