@@ -197,6 +197,7 @@ function iniciarSincronizacionTiempoReal() {
             document.getElementById('loginError').style.display = 'block';
         }
     });
+
     
 
     inputUser?.addEventListener('keyup', e => { if (e.key === 'Enter') btnLogin.click(); });
@@ -205,9 +206,9 @@ function iniciarSincronizacionTiempoReal() {
     document.getElementById('btnLogout')?.addEventListener('click', () => {
         AuthService.logout();
         location.reload();
-    });
-}
-    */
+    });*/
+
+
 
 
 //NUEVO
