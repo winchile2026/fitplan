@@ -22,26 +22,85 @@
         <!-- ============================================
              LOGIN
              ============================================ -->
-        <div id="loginContainer" class="login-container active">
-            <h2><i class="fas fa-lock"></i> Iniciar sesión</h2>
-            <label>Usuario / RUT</label>
+            <!-- ============================================ -->
+<!-- LOGIN / REGISTRO                             -->
+<!-- ============================================ -->
+<div id="loginContainer" class="login-container active">
+    <!-- Tabs Login/Registro -->
+    <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-tab="login">
+            <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+        </button>
+        <button class="auth-tab" data-auth-tab="registro">
+            <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+    </div>
 
-            <!--NUEVO-->
-            <input type="email" id="loginUser" placeholder="tu-email@ejemplo.com">
-
-            <label>Contraseña</label>
-
-            <!--NUEVO-->
-            <input type="password" id="loginPass" placeholder="Contraseña">
-
-
-
-            <div id="loginError" class="login-error">Usuario o contraseña incorrectos</div>
-            <button class="btn" id="btnLogin"><i class="fas fa-sign-in-alt"></i> Ingresar</button>
-            <div class="login-hint">
-                <p>admin / 1234 · recepcion / 1234 · cliente (RUT) / 1234</p>
-            </div>
+    <!-- ==================== LOGIN ==================== -->
+    <div id="authLogin" class="auth-panel active">
+        <h2><i class="fas fa-lock"></i> Iniciar sesión</h2>
+        
+        <label>Email</label>
+        <input type="email" id="loginUser" placeholder="tu-email@ejemplo.com">
+        
+        <label>Contraseña</label>
+        <input type="password" id="loginPass" placeholder="Contraseña">
+        
+        <div id="loginError" class="login-error">Email o contraseña incorrectos</div>
+        
+        <button class="btn" id="btnLogin">
+            <i class="fas fa-sign-in-alt"></i> Ingresar
+        </button>
+        
+        <div class="login-hint">
+            <p>
+                <a href="#" id="btnOlvidePassword" style="color:#3498db;text-decoration:none;">
+                    <i class="fas fa-key"></i> ¿Olvidaste tu contraseña?
+                </a>
+            </p>
         </div>
+    </div>
+
+    <!-- ==================== REGISTRO ==================== -->
+    <div id="authRegistro" class="auth-panel">
+        <h2><i class="fas fa-user-plus"></i> Crear cuenta de cliente</h2>
+        
+        <label>Nombre completo</label>
+        <input type="text" id="regNombre" placeholder="Juan Pérez">
+        
+        <label>RUT</label>
+        <input type="text" id="regRut" placeholder="12.345.678-9">
+        
+        <label>Email</label>
+        <input type="email" id="regEmail" placeholder="tu-email@ejemplo.com">
+        
+        <label>Contraseña</label>
+        <input type="password" id="regPassword" placeholder="Mínimo 6 caracteres">
+        
+        <label>Confirmar contraseña</label>
+        <input type="password" id="regPassword2" placeholder="Repite la contraseña">
+        
+        <div id="registroError" class="login-error"></div>
+        <div id="registroExito" class="login-success" style="display:none;"></div>
+        
+        <button class="btn btn-success" id="btnRegistrar" style="width:100%;margin-top:1rem;">
+            <i class="fas fa-user-plus"></i> Crear Cuenta
+        </button>
+        
+        <div class="login-hint">
+            <p style="font-size:0.75rem;">
+                Al crear tu cuenta podrás acceder a tu plan personalizado.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
 
         <!-- ============================================
              CONTENIDO PRINCIPAL
