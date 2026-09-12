@@ -218,12 +218,150 @@ function configurarLogin() {
         if (e.key === 'Enter') btnLogin.click();
     });
 
-    // Botón logout
+        // Botón logout
     document.getElementById('btnLogout')?.addEventListener('click', async () => {
         await AuthService.logout();
         location.reload();
     });
-}
+
+    //NUEVO
+    
+    // ⬇️ AGREGA ESTO DESDE AQUÍ ⬇️
+
+    // ========================================
+    // TABS LOGIN/REGISTRO
+    // ========================================
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Desactivar todos
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            
+            // Activar el actual
+            tab.classList.add('active');
+            const panelId = 'auth' + tab.dataset.authTab.charAt(0).toUpperCase() + tab.dataset.authTab.slice(1);
+            document.getElementById(panelId)?.classList.add('active');
+        });
+    });
+
+    // ========================================
+    // REGISTRO DE NUEVO CLIENTE
+    // ========================================
+    document.getElementById('btnRegistrar')?.addEventListener('click', async () => {
+        const nombre = document.getElementById('regNombre').value.trim();
+        const rut = document.getElementById('regRut').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
+        const password2 = document.getElementById('regPassword2').value;
+        const errorMsg = document.getElementById('registroError');
+        const exitoMsg = document.getElementById('registroExito');
+        const btn = document.getElementById('btnRegistrar');
+
+        // Ocultar mensajes previos
+        errorMsg.style.display = 'none';
+        exitoMsg.style.display = 'none';
+
+        // Validaciones
+        if (!nombre) {
+            errorMsg.textContent = 'Ingresa tu nombre completo';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        if (!rut) {
+            errorMsg.textContent = 'Ingresa tu RUT';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        if (!email) {
+            errorMsg.textContent = 'Ingresa tu email';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        if (password.length < 6) {
+            errorMsg.textContent = 'La contraseña debe tener al menos 6 caracteres';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        if (password !== password2) {
+            errorMsg.textContent = 'Las contraseñas no coinciden';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        // Deshabilitar botón
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando cuenta...';
+
+        // Registrar
+        const resultado = await AuthService.registro(email, password, { nombre, rut });
+
+        if (resultado.exito) {
+            // Éxito
+            exitoMsg.innerHTML = '<i class="fas fa-check-circle"></i> ¡Cuenta creada! Ahora puedes iniciar sesión.';
+            exitoMsg.style.display = 'block';
+            
+            // Registrar en el sistema de clientes (sin plan)
+            if (!ClienteService.buscarPorRut(rut)) {
+                ClienteService.crear({
+                    rut: rut,
+                    nombre: nombre,
+                    telefono: '',
+                    email: email,
+                    edad: 30,
+                    problema: 'Ninguno'
+                });
+                HistorialService.agregar('Cliente auto-registrado', rut, nombre, `Email: ${email}`);
+            }
+
+            // Limpiar campos
+            document.getElementById('regNombre').value = '';
+            document.getElementById('regRut').value = '';
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regPassword2').value = '';
+
+            // Volver al login después de 2 segundos
+            setTimeout(() => {
+                document.querySelector('.auth-tab[data-auth-tab="login"]')?.click();
+                document.getElementById('loginUser').value = email;
+                document.getElementById('loginPass').focus();
+            }, 2000);
+            
+            console.log('✅ Cliente auto-registrado:', email);
+
+        } else {
+            // Error
+            errorMsg.textContent = resultado.error;
+            errorMsg.style.display = 'block';
+        }
+
+        // Restaurar botón
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-user-plus"></i> Crear Cuenta';
+    });
+
+    // ========================================
+    // RECUPERAR CONTRASEÑA
+    // ========================================
+    document.getElementById('btnOlvidePassword')?.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = prompt('Ingresa tu email para recuperar la contraseña:');
+        if (!email) return;
+
+        const resultado = await AuthService.recuperarPassword(email);
+        
+        if (resultado) {
+            alert('✅ Te enviamos un email con instrucciones para restablecer tu contraseña.\n\nRevisa tu bandeja de entrada (y la carpeta de spam).');
+        } else {
+            alert('❌ No pudimos enviar el email. Verifica que el email sea correcto.');
+        }
+    });
+
+
 
 // ============================================
 // RESTAURAR SESIÓN (Firebase Auth maneja esto)
