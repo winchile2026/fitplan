@@ -2,7 +2,8 @@
  * ============================================
  * SERVICIOS
  * ============================================
- * Toda la lógica de negocio: clientes, pagos, autenticación, historial.
+ * Toda la lógica de negocio: clientes, pagos, historial, autenticación.
+ * Usa Firebase Auth versión COMPAT + Firestore.
  */
 
 import { MESES, PAGOS, ESTADOS, USERS, ROLES, PAGO_CONFIG, STORAGE_KEYS } from './config.js';
@@ -20,7 +21,6 @@ export const ClienteService = {
      */
     cargar() {
         const data = StorageService.get(STORAGE_KEYS.CLIENTES, []);
-        // Normalizar: asegurar que todos tengan los campos
         this.clientes = data.map(c => ({
             ...c,
             plan: c.plan || null,
@@ -31,24 +31,23 @@ export const ClienteService = {
         return this.clientes;
     },
 
-    
-    //REEMPLA POR ESTO
+    /**
+     * Guarda los clientes en localStorage + Firebase
+     */
     guardar() {
-    // 1. Guardar localmente
-    StorageService.set(STORAGE_KEYS.CLIENTES, this.clientes);
-    
-    // 2. Sincronizar con Firebase si está disponible
-    if (window.db) {
-        window.db.collection('gimnasio').doc('data').set({
-            clientes: this.clientes,
-            ultimaActualizacion: new Date().toISOString()
-        }, { merge: true })
-        .then(() => console.log('☁️ Clientes sincronizados con Firebase'))
-        .catch(e => console.error('❌ Error sincronizando:', e));
-    }
-},
+        // 1. Guardar localmente
+        StorageService.set(STORAGE_KEYS.CLIENTES, this.clientes);
 
-
+        // 2. Sincronizar con Firebase
+        if (window.db) {
+            window.db.collection('gimnasio').doc('data').set({
+                clientes: this.clientes,
+                ultimaActualizacion: new Date().toISOString()
+            }, { merge: true })
+            .then(() => console.log('☁️ Clientes sincronizados con Firebase'))
+            .catch(e => console.error('❌ Error sincronizando clientes:', e));
+        }
+    },
 
     /**
      * Busca un cliente por RUT
@@ -68,7 +67,7 @@ export const ClienteService = {
             email: datos.email || '',
             edad: parseInt(datos.edad) || 30,
             problema: datos.problema || 'Ninguno',
-            plan: null,                    // ⚠️ SIN PLAN al crear
+            plan: null,
             planesComprados: [],
             diasCliente: [],
             estado: ESTADOS.NUEVO,
@@ -115,44 +114,47 @@ export const ClienteService = {
         return cliente;
     },
 
-   
-    //NUEVO
+    /**
+     * Compra un plan: ASOCIA EL PLAN AL RUT
+     */
     async comprarPlan(rut, planId) {
-    const cliente = this.buscarPorRut(rut);
-    if (!cliente) return null;
-    const planBase = BASE_PLANES[planId];
-    if (!planBase) return null;
+        const cliente = this.buscarPorRut(rut);
+        if (!cliente) return null;
+        const planBase = BASE_PLANES[planId];
+        if (!planBase) return null;
 
-    cliente.plan = planId;
-    const yaExiste = cliente.planesComprados.find(p => p.id === planId);
-    if (!yaExiste) {
-        cliente.planesComprados.push({
-            id: planId,
-            nombre: planBase.nombre,
-            precio: planBase.precio,
-            fecha: Utils.fechaHoy()
-        });
-    }
+        // Asociar plan al RUT
+        cliente.plan = planId;
 
-    // Asociar plan al usuario en Firebase Auth
-    if (window.db && AuthService.currentUser) {
-        try {
-            await window.db.collection('usuarios').doc(AuthService.currentUser.uid).set({
-                rut: rut,
-                plan: planId,
-                planNombre: planBase.nombre
-            }, { merge: true });
-        } catch (e) {
-            console.warn('⚠️ No se pudo asociar plan al usuario:', e);
+        // Agregar al historial sin duplicar
+        if (!cliente.planesComprados) cliente.planesComprados = [];
+        const yaExiste = cliente.planesComprados.find(p => p.id === planId);
+        if (!yaExiste) {
+            cliente.planesComprados.push({
+                id: planId,
+                nombre: planBase.nombre,
+                precio: planBase.precio,
+                fecha: Utils.fechaHoy()
+            });
         }
+
+        this.guardar();
+
+        // Sincronizar con el usuario de Firebase Auth (si aplica)
+        if (window.db && AuthService.currentUser && AuthService.currentUser.uid) {
+            try {
+                await window.db.collection('usuarios').doc(AuthService.currentUser.uid).set({
+                    rut: rut,
+                    plan: planId,
+                    planNombre: planBase.nombre
+                }, { merge: true });
+            } catch (e) {
+                console.warn('⚠️ No se pudo asociar plan al usuario:', e);
+            }
+        }
+
+        return cliente;
     }
-
-    this.guardar();
-    return cliente;
-}
-
-
-
 };
 
 // ============================================
@@ -229,9 +231,9 @@ export const PagoService = {
     }
 };
 
-
-
-//NUEVO GUARDAR
+// ============================================
+// SERVICIO DE HISTORIAL
+// ============================================
 export const HistorialService = {
     historial: [],
 
@@ -240,11 +242,13 @@ export const HistorialService = {
         return this.historial;
     },
 
-    // ✅ ACTUALIZADO: Sincroniza con Firebase
+    /**
+     * Guarda el historial en localStorage + Firebase
+     */
     guardar() {
         // 1. Guardar localmente
         StorageService.set(STORAGE_KEYS.HISTORIAL, this.historial);
-        
+
         // 2. Sincronizar con Firebase
         if (window.db) {
             window.db.collection('gimnasio').doc('data').set({
@@ -256,6 +260,9 @@ export const HistorialService = {
         }
     },
 
+    /**
+     * Agrega una entrada al historial
+     */
     agregar(accion, rut, nombre, detalle = '') {
         this.historial.push({
             fecha: Utils.fechaHoraActual(),
@@ -269,8 +276,6 @@ export const HistorialService = {
     }
 };
 
-
-//NUEVO
 // ============================================
 // SERVICIO DE AUTENTICACIÓN (Firebase Auth COMPAT)
 // ============================================
@@ -296,25 +301,46 @@ export const AuthService = {
      */
     async login(email, password) {
         try {
+            if (!this.auth) {
+                console.error('❌ Auth no inicializado');
+                return null;
+            }
+
             const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
             // Obtener rol desde Firestore
             const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
-            
+
             if (!userDoc.exists) {
-                console.warn('⚠️ Usuario sin rol asignado');
-                return null;
+                console.warn('⚠️ Usuario sin rol asignado en Firestore');
+                // Si no existe el documento, crear uno básico como cliente
+                await window.db.collection('usuarios').doc(user.uid).set({
+                    email: user.email,
+                    rol: 'cliente',
+                    nombre: user.email.split('@')[0],
+                    rut: null,
+                    fechaRegistro: new Date().toISOString()
+                });
+                
+                this.currentUser = {
+                    uid: user.uid,
+                    email: user.email,
+                    rol: 'cliente',
+                    nombre: user.email.split('@')[0],
+                    rut: null
+                };
+                return this.currentUser;
             }
 
             const userData = userDoc.data();
-            
+
             this.currentUser = {
                 uid: user.uid,
                 email: user.email,
                 rol: userData.rol,
-                nombre: userData.nombre,
-                rut: userData.rut
+                nombre: userData.nombre || user.email,
+                rut: userData.rut || null
             };
 
             // Si es cliente, guardar su RUT
@@ -336,7 +362,9 @@ export const AuthService = {
      */
     async logout() {
         try {
-            await this.auth.signOut();
+            if (this.auth) {
+                await this.auth.signOut();
+            }
             this.currentUser = null;
             this.clienteActualRut = null;
             StorageService.remove(STORAGE_KEYS.SESSION);
@@ -352,6 +380,11 @@ export const AuthService = {
      */
     async registro(email, password, datosAdicionales = {}) {
         try {
+            if (!this.auth) {
+                console.error('❌ Auth no inicializado');
+                return null;
+            }
+
             const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
@@ -378,6 +411,7 @@ export const AuthService = {
      */
     async recuperarPassword(email) {
         try {
+            if (!this.auth) return false;
             await this.auth.sendPasswordResetEmail(email);
             console.log('✅ Email de recuperación enviado');
             return true;
@@ -392,42 +426,61 @@ export const AuthService = {
      */
     observarEstado(callback) {
         if (!this.auth) {
-            console.warn('⚠️ Auth no inicializado');
+            console.warn('⚠️ Auth no inicializado, callback con null');
             if (callback) callback(null);
             return;
         }
-        
+
         this.auth.onAuthStateChanged(async (user) => {
             if (user) {
                 try {
                     const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
+                    
                     if (userDoc.exists) {
                         const userData = userDoc.data();
                         this.currentUser = {
                             uid: user.uid,
                             email: user.email,
                             rol: userData.rol,
-                            nombre: userData.nombre,
-                            rut: userData.rut
+                            nombre: userData.nombre || user.email,
+                            rut: userData.rut || null
                         };
                         if (userData.rol === 'cliente' && userData.rut) {
                             this.clienteActualRut = userData.rut;
                         }
+                    } else {
+                        // Usuario sin documento: tratar como cliente básico
+                        this.currentUser = {
+                            uid: user.uid,
+                            email: user.email,
+                            rol: 'cliente',
+                            nombre: user.email.split('@')[0],
+                            rut: null
+                        };
                     }
                 } catch (e) {
-                    console.error('Error obteniendo usuario:', e);
+                    console.error('❌ Error obteniendo usuario:', e);
+                    this.currentUser = null;
                 }
             } else {
                 this.currentUser = null;
                 this.clienteActualRut = null;
             }
-            
+
             if (callback) callback(this.currentUser);
         });
     },
 
-    // Métodos auxiliares
-    esAdmin() { return this.currentUser && this.currentUser.rol === ROLES.ADMIN; },
-    esRecepcion() { return this.currentUser && this.currentUser.rol === ROLES.RECEPCION; },
-    esCliente() { return this.currentUser && this.currentUser.rol === ROLES.CLIENTE; }
+    /**
+     * Métodos auxiliares
+     */
+    esAdmin() { 
+        return this.currentUser && this.currentUser.rol === ROLES.ADMIN; 
+    },
+    esRecepcion() { 
+        return this.currentUser && this.currentUser.rol === ROLES.RECEPCION; 
+    },
+    esCliente() { 
+        return this.currentUser && this.currentUser.rol === ROLES.CLIENTE; 
+    }
 };
