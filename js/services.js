@@ -378,17 +378,24 @@ export const AuthService = {
     /**
      * Registro de nuevo usuario (para clientes)
      */
+    /**
+     * 
+     * Registro de nuevo usuario (para clientes)
+     * Crea usuario en Auth + documento en Firestore con rol "cliente"
+     */
+    /*NUEVO*/
     async registro(email, password, datosAdicionales = {}) {
         try {
             if (!this.auth) {
                 console.error('❌ Auth no inicializado');
-                return null;
+                return { exito: false, error: 'Auth no inicializado' };
             }
 
+            // 1. Crear usuario en Firebase Auth
             const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
-            // Crear documento en Firestore con rol de cliente
+            // 2. Crear documento en Firestore con rol de cliente
             await window.db.collection('usuarios').doc(user.uid).set({
                 email: user.email,
                 rol: 'cliente',
@@ -398,13 +405,37 @@ export const AuthService = {
             });
 
             console.log('✅ Registro exitoso:', user.email);
-            return user;
+            return { 
+                exito: true, 
+                user: user,
+                mensaje: 'Cuenta creada correctamente'
+            };
 
         } catch (error) {
             console.error('❌ Error registro:', error.code, error.message);
-            return null;
+            
+            // Mensajes personalizados
+            let mensaje = 'Error al crear la cuenta';
+            
+            if (error.code === 'auth/email-already-in-use') {
+                mensaje = 'Este email ya está registrado';
+            } else if (error.code === 'auth/weak-password') {
+                mensaje = 'La contraseña debe tener al menos 6 caracteres';
+            } else if (error.code === 'auth/invalid-email') {
+                mensaje = 'El email no es válido';
+            } else if (error.code === 'auth/operation-not-allowed') {
+                mensaje = 'El registro está deshabilitado. Contacta al administrador.';
+            }
+            
+            return { 
+                exito: false, 
+                error: mensaje,
+                codigo: error.code
+            };
         }
     },
+
+
 
     /**
      * Enviar email de recuperación de contraseña
