@@ -407,6 +407,9 @@ export const HistorialService = {
     esCliente() { return this.currentUser && this.currentUser.rol === ROLES.CLIENTE; }
 };*/
 
+
+
+
 // ============================================
 /*import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
 
