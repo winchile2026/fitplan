@@ -1644,3 +1644,74 @@ body {
     color: #7f8c8d;
     font-size: 0.8rem;
 }
+
+
+/*NUEVO*/
+/* ============================================
+   TABS DE AUTENTICACIÓN (Login/Registro)
+   ============================================ */
+.auth-tabs {
+    display: flex;
+    gap: 0.3rem;
+    background: #f0f5fa;
+    padding: 0.3rem;
+    border-radius: 40px;
+    margin-bottom: 1.5rem;
+}
+
+.auth-tab {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 0.6rem 1rem;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #1d5a7a;
+    cursor: pointer;
+    transition: 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.auth-tab:hover {
+    background: rgba(29, 90, 122, 0.1);
+}
+
+.auth-tab.active {
+    background: #1d5a7a;
+    color: white;
+    box-shadow: 0 4px 12px rgba(29, 90, 122, 0.3);
+}
+
+.auth-panel {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.auth-panel.active {
+    display: block;
+}
+
+.login-success {
+    background: #d4edda;
+    color: #155724;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin-top: 0.8rem;
+    border-left: 4px solid #27ae60;
+    text-align: center;
+}
+
+.login-success i {
+    color: #27ae60;
+    margin-right: 6px;
+}
+
+#btnOlvidePassword:hover {
+    text-decoration: underline !important;
+}
