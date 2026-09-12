@@ -110,7 +110,7 @@ function iniciarSincronizacionTiempoReal() {
 // ============================================
 // INICIALIZACIÓN
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
+/*document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 FitPlan Pro iniciando...');
 
     ClienteService.cargar();
@@ -123,7 +123,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     configurarLogin();
+    restaurarSesion();*/
+
+    //NUEVO
+    document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 FitPlan Pro iniciando...');
+
+    // Inicializar Firebase
+    try {
+        if (!firebase.apps.length) {
+            firebase.initializeApp(FIREBASE_CONFIG);
+        }
+        window.db = firebase.firestore();
+        console.log('✅ Firebase conectado');
+    } catch (e) {
+        console.warn('⚠️ Firebase no disponible:', e);
+    }
+
+    // Inicializar AuthService
+    AuthService.init();
+
+    // Cargar datos
+    ClienteService.cargar();
+    HistorialService.cargar();
+
+    // Cargar datos desde Firebase
+    if (window.db) {
+        iniciarSincronizacionTiempoReal();
+    }
+
+    if (ClienteService.clientes.length === 0) {
+        console.log('📋 Generando clientes de prueba...');
+        ClienteService.clientes = generarClientesPrueba(200);
+        ClienteService.guardar();
+    }
+
+    configurarLogin();
     restaurarSesion();
+});
+
+
+
+
+
+
 
     //NUEVO: Iniciar sincronización
     iniciarSincronizacionTiempoReal();
@@ -139,7 +182,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ============================================
 // LOGIN
 // ============================================
-function configurarLogin() {
+/*function configurarLogin() {
     const btnLogin = document.getElementById('btnLogin');
     const inputUser = document.getElementById('loginUser');
     const inputPass = document.getElementById('loginPass');
@@ -154,6 +197,7 @@ function configurarLogin() {
             document.getElementById('loginError').style.display = 'block';
         }
     });
+    
 
     inputUser?.addEventListener('keyup', e => { if (e.key === 'Enter') btnLogin.click(); });
     inputPass?.addEventListener('keyup', e => { if (e.key === 'Enter') btnLogin.click(); });
@@ -163,11 +207,78 @@ function configurarLogin() {
         location.reload();
     });
 }
+    */
+
+
+//NUEVO
+function configurarLogin() {
+    const btnLogin = document.getElementById('btnLogin');
+    const inputEmail = document.getElementById('loginUser');  // Ahora es email
+    const inputPass = document.getElementById('loginPass');
+    const errorMsg = document.getElementById('loginError');
+
+    // Cambiar placeholder a email
+    if (inputEmail) {
+        inputEmail.placeholder = 'tu-email@ejemplo.com';
+        inputEmail.type = 'email';
+    }
+
+    btnLogin?.addEventListener('click', async () => {
+        const email = inputEmail.value.trim();
+        const password = inputPass.value;
+
+        if (!email || !password) {
+            errorMsg.textContent = 'Ingresa email y contraseña';
+            errorMsg.style.display = 'block';
+            return;
+        }
+
+        // Deshabilitar botón mientras carga
+        btnLogin.disabled = true;
+        btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...';
+
+        const user = await AuthService.login(email, password);
+
+        if (user) {
+            document.getElementById('loginContainer').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+            errorMsg.style.display = 'none';
+            renderUI(user);
+        } else {
+            errorMsg.textContent = 'Email o contraseña incorrectos';
+            errorMsg.style.display = 'block';
+        }
+
+        // Restaurar botón
+        btnLogin.disabled = false;
+        btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+    });
+
+    // Permitir Enter
+    inputEmail?.addEventListener('keyup', e => { 
+        if (e.key === 'Enter') btnLogin.click(); 
+    });
+    inputPass?.addEventListener('keyup', e => { 
+        if (e.key === 'Enter') btnLogin.click(); 
+    });
+
+    // Botón cerrar sesión
+    document.getElementById('btnLogout')?.addEventListener('click', async () => {
+        await AuthService.logout();
+        location.reload();
+    });
+}
+
+
+
+
+
+
 
 // ============================================
 // RESTAURAR SESIÓN
 // ============================================
-function restaurarSesion() {
+/*function restaurarSesion() {
     const session = StorageService.get(STORAGE_KEYS.SESSION);
     if (session && session.username) {
         const user = AuthService.login(session.username, PAGO_CONFIG.PASSWORD_CLIENTE);
@@ -177,7 +288,30 @@ function restaurarSesion() {
             renderUI(user);
         }
     }
+}*/
+
+//NUEVO
+function restaurarSesion() {
+    // Firebase Auth maneja la sesión automáticamente
+    AuthService.observarEstado((user) => {
+        if (user) {
+            document.getElementById('loginContainer').classList.remove('active');
+            document.getElementById('mainContent').style.display = 'block';
+            renderUI(user);
+        } else {
+            document.getElementById('loginContainer').classList.add('active');
+            document.getElementById('mainContent').style.display = 'none';
+        }
+    });
 }
+
+
+
+
+
+
+
+
 
 // ============================================
 // RENDERIZAR UI SEGÚN ROL
