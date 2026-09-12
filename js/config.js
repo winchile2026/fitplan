@@ -177,14 +177,20 @@ export const PAGO_CONFIG = {
 // ============================================
 // 🔥 FIREBASE CONFIG (TUS CREDENCIALES REALES)
 // ============================================
-export const FIREBASE_CONFIG = {
-    apiKey: "AIzaSyBBrM4T8D7sWsEcciMHiVKOLKm9M8XxYeQ",
-    authDomain: "fitplan-pro-64b78.firebaseapp.com",
-    projectId: "fitplan-pro-64b78",
-    storageBucket: "fitplan-pro-64b78.firebasestorage.app",
-    messagingSenderId: "285908919557",
-    appId: "1:285908919557:web:2228fec38090151f52c36c"
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBBrM4T8D7sWsEcciMHiVKOLKm9M8XxYeQ",
+  authDomain: "fitplan-pro-64b78.firebaseapp.com",
+  projectId: "fitplan-pro-64b78",
+  storageBucket: "fitplan-pro-64b78.firebasestorage.app",
+  messagingSenderId: "285908919557",
+  appId: "1:285908919557:web:2228fec38090151f52c36c"
 };
 
 // Initialize Firebase
-const app = initializeApp(FIREBASE_CONFIG);
+const app = initializeApp(firebaseConfig);
