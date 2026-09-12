@@ -174,7 +174,7 @@ function iniciarSincronizacionTiempoReal() {
 
 
 
-//});
+);
 
 
 
