@@ -316,14 +316,14 @@ export const HistorialService = {
 // ============================================
 // SERVICIO DE AUTENTICACIÓN
 // ============================================
-export const AuthService = {
+/*export const AuthService = {
     currentUser: null,
     clienteActualRut: null,
 
     /**
      * Intenta iniciar sesión
      */
-    login(username, password) {
+   /* login(username, password) {
         // Admin o Recepción
         if (USERS[username] && USERS[username].password === password) {
             this.currentUser = { username, ...USERS[username] };
@@ -358,4 +358,41 @@ export const AuthService = {
     esAdmin() { return this.currentUser && this.currentUser.rol === ROLES.ADMIN; },
     esRecepcion() { return this.currentUser && this.currentUser.rol === ROLES.RECEPCION; },
     esCliente() { return this.currentUser && this.currentUser.rol === ROLES.CLIENTE; }
+};
+
+*/
+
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+
+const auth = getAuth();
+
+export const AuthService = {
+    async login(email, password) {
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
+            
+            // Obtener rol desde Firestore
+            const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
+            const userData = userDoc.data();
+            
+            this.currentUser = {
+                uid: user.uid,
+                email: user.email,
+                rol: userData.rol,  // 'admin', 'recepcion', 'cliente'
+                nombre: userData.nombre,
+                rut: userData.rut
+            };
+            
+            return this.currentUser;
+        } catch (error) {
+            console.error('Error login:', error);
+            return null;
+        }
+    },
+    
+    async logout() {
+        await auth.signOut();
+        this.currentUser = null;
+    }
 };
