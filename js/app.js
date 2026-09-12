@@ -123,7 +123,9 @@ function iniciarSincronizacionTiempoReal() {
     }
 
     configurarLogin();
-    restaurarSesion();*/
+    restaurarSesion();
+
+    });*/
 
     //NUEVO
     document.addEventListener('DOMContentLoaded', () => {
@@ -172,9 +174,6 @@ function iniciarSincronizacionTiempoReal() {
     iniciarSincronizacionTiempoReal();
 
 
-
-
-);
 
 
 
