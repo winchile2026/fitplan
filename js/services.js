@@ -31,13 +31,7 @@ export const ClienteService = {
         return this.clientes;
     },
 
-    /**
-     * Guarda los clientes en localStorage
-     
-    guardar() {
-        StorageService.set(STORAGE_KEYS.CLIENTES, this.clientes);
-    },*/
-
+    
     //REEMPLA POR ESTO
     guardar() {
     // 1. Guardar localmente
@@ -53,10 +47,6 @@ export const ClienteService = {
         .catch(e => console.error('❌ Error sincronizando:', e));
     }
 },
-
-
-
-
 
 
 
@@ -125,34 +115,7 @@ export const ClienteService = {
         return cliente;
     },
 
-    /**
-     * Compra un plan: ASOCIA EL PLAN AL RUT
-     * ⚠️ Este es el ÚNICO lugar donde se asigna plan a un cliente
-     */
-   /* comprarPlan(rut, planId) {
-        const cliente = this.buscarPorRut(rut);
-        if (!cliente) return null;
-        const planBase = BASE_PLANES[planId];
-        if (!planBase) return null;
-
-        // Asociar plan al RUT
-        cliente.plan = planId;
-
-        // Agregar al historial sin duplicar
-        const yaExiste = cliente.planesComprados.find(p => p.id === planId);
-        if (!yaExiste) {
-            cliente.planesComprados.push({
-                id: planId,
-                nombre: planBase.nombre,
-                precio: planBase.precio,
-                fecha: Utils.fechaHoy()
-            });
-        }
-
-        this.guardar();
-        return cliente;
-    } */
-
+   
     //NUEVO
     async comprarPlan(rut, planId) {
     const cliente = this.buscarPorRut(rut);
@@ -187,15 +150,6 @@ export const ClienteService = {
     this.guardar();
     return cliente;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -275,36 +229,7 @@ export const PagoService = {
     }
 };
 
-// ============================================
-// SERVICIO DE HISTORIAL
-// ============================================
-/*export const HistorialService = {
-    historial: [],
 
-    cargar() {
-        this.historial = StorageService.get(STORAGE_KEYS.HISTORIAL, []);
-        return this.historial;
-    },
-
-    guardar() {
-        StorageService.set(STORAGE_KEYS.HISTORIAL, this.historial);
-    },
-
-    /**
-     * Agrega una entrada al historial
-     */
-    /*agregar(accion, rut, nombre, detalle = '') {
-        this.historial.push({
-            fecha: Utils.fechaHoraActual(),
-            accion,
-            rut,
-            nombre,
-            detalle
-        });
-        if (this.historial.length > 500) this.historial.shift();
-        this.guardar();
-    }
-};*/
 
 //NUEVO GUARDAR
 export const HistorialService = {
@@ -345,121 +270,9 @@ export const HistorialService = {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// ============================================
-// SERVICIO DE AUTENTICACIÓN
-// ============================================
-/*export const AuthService = {
-    currentUser: null,
-    clienteActualRut: null,
-
-    /**
-     * Intenta iniciar sesión
-     */
-    /*login(username, password) {*/
-        // Admin o Recepción
-     /*   if (USERS[username] && USERS[username].password === password) {
-            this.currentUser = { username, ...USERS[username] };
-            this.clienteActualRut = null;
-            StorageService.set(STORAGE_KEYS.SESSION, { username });
-            return this.currentUser;
-        }
-
-        // Cliente
-        const cliente = ClienteService.buscarPorRut(username);
-        if (cliente && password === PAGO_CONFIG.PASSWORD_CLIENTE) {
-            this.currentUser = {
-                username: cliente.rut,
-                rol: ROLES.CLIENTE,
-                nombre: cliente.nombre
-            };
-            this.clienteActualRut = cliente.rut;
-            StorageService.set(STORAGE_KEYS.SESSION, { username });
-            return this.currentUser;
-        }
-
-        return null;
-    },
-
-    logout() {
-        this.currentUser = null;
-        this.clienteActualRut = null;
-        StorageService.remove(STORAGE_KEYS.SESSION);
-        StorageService.remove(STORAGE_KEYS.ACTIVE_TAB);
-    },
-
-    esAdmin() { return this.currentUser && this.currentUser.rol === ROLES.ADMIN; },
-    esRecepcion() { return this.currentUser && this.currentUser.rol === ROLES.RECEPCION; },
-    esCliente() { return this.currentUser && this.currentUser.rol === ROLES.CLIENTE; }
-};*/
-
-
-
-
-// ============================================
-/*import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
-
-const auth = getAuth();
-
-export const AuthService = {
-    async login(email, password) {
-        try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-            
-            // Obtener rol desde Firestore
-            const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
-            const userData = userDoc.data();
-            
-            this.currentUser = {
-                uid: user.uid,
-                email: user.email,
-                rol: userData.rol,  // 'admin', 'recepcion', 'cliente'
-                nombre: userData.nombre,
-                rut: userData.rut
-            };
-            
-            return this.currentUser;
-        } catch (error) {
-            console.error('Error login:', error);
-            return null;
-        }
-    },
-    
-    async logout() {
-        await auth.signOut();
-        this.currentUser = null;
-    }
-};
-*/
-
-
 //NUEVO
-import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    sendPasswordResetEmail
-} from 'firebase/auth';
-
 // ============================================
-// SERVICIO DE AUTENTICACIÓN CON FIREBASE AUTH
+// SERVICIO DE AUTENTICACIÓN (Firebase Auth COMPAT)
 // ============================================
 export const AuthService = {
     currentUser: null,
@@ -474,7 +287,7 @@ export const AuthService = {
             console.warn('⚠️ Firebase no inicializado');
             return;
         }
-        this.auth = getAuth();
+        this.auth = firebase.auth();
         console.log('✅ AuthService inicializado');
     },
 
@@ -483,7 +296,7 @@ export const AuthService = {
      */
     async login(email, password) {
         try {
-            const userCredential = await signInWithEmailAndPassword(this.auth, email, password);
+            const userCredential = await this.auth.signInWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
             // Obtener rol desde Firestore
@@ -509,7 +322,7 @@ export const AuthService = {
                 this.clienteActualRut = userData.rut;
             }
 
-            console.log('✅ Login exitoso:', this.currentUser);
+            console.log('✅ Login exitoso:', this.currentUser.rol);
             return this.currentUser;
 
         } catch (error) {
@@ -523,7 +336,7 @@ export const AuthService = {
      */
     async logout() {
         try {
-            await signOut(this.auth);
+            await this.auth.signOut();
             this.currentUser = null;
             this.clienteActualRut = null;
             StorageService.remove(STORAGE_KEYS.SESSION);
@@ -539,7 +352,7 @@ export const AuthService = {
      */
     async registro(email, password, datosAdicionales = {}) {
         try {
-            const userCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+            const userCredential = await this.auth.createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
 
             // Crear documento en Firestore con rol de cliente
@@ -565,7 +378,7 @@ export const AuthService = {
      */
     async recuperarPassword(email) {
         try {
-            await sendPasswordResetEmail(this.auth, email);
+            await this.auth.sendPasswordResetEmail(email);
             console.log('✅ Email de recuperación enviado');
             return true;
         } catch (error) {
@@ -578,23 +391,31 @@ export const AuthService = {
      * Observador del estado de autenticación
      */
     observarEstado(callback) {
-        if (!this.auth) return;
+        if (!this.auth) {
+            console.warn('⚠️ Auth no inicializado');
+            if (callback) callback(null);
+            return;
+        }
         
-        onAuthStateChanged(this.auth, async (user) => {
+        this.auth.onAuthStateChanged(async (user) => {
             if (user) {
-                const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
-                if (userDoc.exists) {
-                    const userData = userDoc.data();
-                    this.currentUser = {
-                        uid: user.uid,
-                        email: user.email,
-                        rol: userData.rol,
-                        nombre: userData.nombre,
-                        rut: userData.rut
-                    };
-                    if (userData.rol === 'cliente' && userData.rut) {
-                        this.clienteActualRut = userData.rut;
+                try {
+                    const userDoc = await window.db.collection('usuarios').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        this.currentUser = {
+                            uid: user.uid,
+                            email: user.email,
+                            rol: userData.rol,
+                            nombre: userData.nombre,
+                            rut: userData.rut
+                        };
+                        if (userData.rol === 'cliente' && userData.rut) {
+                            this.clienteActualRut = userData.rut;
+                        }
                     }
+                } catch (e) {
+                    console.error('Error obteniendo usuario:', e);
                 }
             } else {
                 this.currentUser = null;
