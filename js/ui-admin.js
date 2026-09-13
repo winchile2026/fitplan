@@ -876,101 +876,93 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
         });
     },*/
     //NUEVO
-    // ============================================
-// 7. OFERTAS (solo admin puede editar/eliminar)
-// ============================================
-renderOfertas() {
-    const cont = document.getElementById('tabContentContainer');
-    const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
-
-    cont.innerHTML = `
-        <div class="card">
-            <h2><i class="fas fa-tags"></i> Planes y Ofertas</h2>
-            <p style="color:#7f8c8d;font-size:0.9rem;margin-bottom:1rem;">
-                <i class="fas fa-info-circle"></i> Solo el administrador puede modificar las ofertas.
-            </p>
-
-            <button class="btn btn-success" id="btnAgregarOferta" style="margin-bottom:1rem;">
-                <i class="fas fa-plus"></i> Agregar oferta
-            </button>
-
-            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
-                ${ofertas.map((p, i) => `
-                    <div class="oferta-card">
-                        <div class="plan-nombre">${p.nombre}</div>
-                        <div class="precio">${Utils.formatoMoneda(p.precio)}</div>
-                        <div style="font-size:0.8rem;color:#7f8c8d;">
-                            ${(p.ejercicios || []).length} ejercicios · ${(p.comidas || []).length} comidas
-                        </div>
-                        <button class="btn-ver-detalle" data-index="${i}" data-accion="ver-detalle">
-                            <i class="fas fa-eye"></i> Ver detalles
-                        </button>
-                        <div style="display:flex;gap:0.5rem;margin-top:0.5rem;justify-content:center;">
-                            <i class="fas fa-sync-alt" data-index="${i}" data-accion="editar-oferta" 
-                               style="color:#f39c12;cursor:pointer;font-size:1.2rem;" title="Editar"></i>
-                            <i class="fas fa-trash" data-index="${i}" data-accion="eliminar-oferta" 
-                               style="color:#e74c3c;cursor:pointer;font-size:1.2rem;" title="Eliminar"></i>
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-
-    // Agregar oferta
-    document.getElementById('btnAgregarOferta')?.addEventListener('click', () => {
-        const nombre = prompt('Nombre del plan:'); if (!nombre) return;
-        const precio = parseInt(prompt('Precio:')); if (!precio) return;
-        const nuevas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
-        nuevas.push({ 
-            id: 'custom-' + Date.now(), 
-            nombre, precio, 
-            ejercicios: [], comidas: [] 
-        });
-        StorageService.set(STORAGE_KEYS.OFERTAS, nuevas);
-        this.renderOfertas();
-        alert('✅ Oferta agregada');
-    });
-
-    // Ver detalle
-    cont.querySelectorAll('[data-accion="ver-detalle"]').forEach(el => {
-        el.addEventListener('click', () => {
-            const i = parseInt(el.dataset.index);
-            this.abrirModalDetallePlan(ofertas[i]);
-        });
-    });
-
-    // Editar
-    cont.querySelectorAll('[data-accion="editar-oferta"]').forEach(el => {
-        el.addEventListener('click', () => {
-            const i = parseInt(el.dataset.index);
-            const p = ofertas[i];
-            const n = prompt('Nombre:', p.nombre); if (n) p.nombre = n;
-            const pr = prompt('Precio:', p.precio); if (pr) p.precio = parseInt(pr);
-            StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
-            this.renderOfertas();
-            alert('✅ Oferta actualizada');
-        });
-    });
-
-    // Eliminar
-    cont.querySelectorAll('[data-accion="eliminar-oferta"]').forEach(el => {
-        el.addEventListener('click', () => {
-            const i = parseInt(el.dataset.index);
-            if (!confirm(`¿Eliminar "${ofertas[i].nombre}"?`)) return;
-            ofertas.splice(i, 1);
-            StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
-            this.renderOfertas();
-            alert('✅ Oferta eliminada');
-        });
-    });
-},
-    
-
-    // ============================================
-    // MODAL DETALLE DE PLAN (reutilizable)
-    // ============================================
         // ============================================
+    // 7. OFERTAS (solo admin puede editar/eliminar)
+    // ============================================
+    renderOfertas() {
+        const cont = document.getElementById('tabContentContainer');
+        const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
+
+        cont.innerHTML = `
+            <div class="card">
+                <h2><i class="fas fa-tags"></i> Planes y Ofertas</h2>
+                <p style="color:#7f8c8d;font-size:0.9rem;margin-bottom:1rem;">
+                    <i class="fas fa-info-circle"></i> Solo el administrador puede modificar las ofertas.
+                </p>
+
+                <button class="btn btn-success" id="btnAgregarOferta" style="margin-bottom:1rem;">
+                    <i class="fas fa-plus"></i> Agregar oferta
+                </button>
+
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+                    ${ofertas.map((p, i) => `
+                        <div class="oferta-card">
+                            <div class="plan-nombre">${p.nombre}</div>
+                            <div class="precio">${Utils.formatoMoneda(p.precio)}</div>
+                            <div style="font-size:0.8rem;color:#7f8c8d;">
+                                ${(p.ejercicios || []).length} ejercicios · ${(p.comidas || []).length} comidas
+                            </div>
+                            <button class="btn-ver-detalle" data-index="${i}" data-accion="ver-detalle">
+                                <i class="fas fa-eye"></i> Ver detalles
+                            </button>
+                            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;justify-content:center;">
+                                <i class="fas fa-sync-alt" data-index="${i}" data-accion="editar-oferta" 
+                                   style="color:#f39c12;cursor:pointer;font-size:1.2rem;" title="Editar"></i>
+                                <i class="fas fa-trash" data-index="${i}" data-accion="eliminar-oferta" 
+                                   style="color:#e74c3c;cursor:pointer;font-size:1.2rem;" title="Eliminar"></i>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+
+        document.getElementById('btnAgregarOferta')?.addEventListener('click', () => {
+            const nombre = prompt('Nombre del plan:'); if (!nombre) return;
+            const precio = parseInt(prompt('Precio:')); if (!precio) return;
+            const nuevas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
+            nuevas.push({ 
+                id: 'custom-' + Date.now(), 
+                nombre, precio, 
+                ejercicios: [], comidas: [] 
+            });
+            StorageService.set(STORAGE_KEYS.OFERTAS, nuevas);
+            this.renderOfertas();
+            alert('✅ Oferta agregada');
+        });
+
+        cont.querySelectorAll('[data-accion="ver-detalle"]').forEach(el => {
+            el.addEventListener('click', () => {
+                const i = parseInt(el.dataset.index);
+                this.abrirModalDetallePlan(ofertas[i]);
+            });
+        });
+
+        cont.querySelectorAll('[data-accion="editar-oferta"]').forEach(el => {
+            el.addEventListener('click', () => {
+                const i = parseInt(el.dataset.index);
+                const p = ofertas[i];
+                const n = prompt('Nombre:', p.nombre); if (n) p.nombre = n;
+                const pr = prompt('Precio:', p.precio); if (pr) p.precio = parseInt(pr);
+                StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
+                this.renderOfertas();
+                alert('✅ Oferta actualizada');
+            });
+        });
+
+        cont.querySelectorAll('[data-accion="eliminar-oferta"]').forEach(el => {
+            el.addEventListener('click', () => {
+                const i = parseInt(el.dataset.index);
+                if (!confirm(`¿Eliminar "${ofertas[i].nombre}"?`)) return;
+                ofertas.splice(i, 1);
+                StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
+                this.renderOfertas();
+                alert('✅ Oferta eliminada');
+            });
+        });
+    },    // ← ESTA COMA ES CLAVE
+
+    // ============================================
     // MODAL DETALLE DE PLAN (para admin/recepción)
     // ============================================
     abrirModalDetallePlan(plan) {
