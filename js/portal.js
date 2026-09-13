@@ -266,13 +266,35 @@ function configurarEventos() {
 // ============================================
 // INICIALIZAR
 // ============================================
-document.addEventListener('DOMContentLoaded', () => {
+/*document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 Portal iniciando...');
     
     cargarPlanes();
     cargarPromociones();
     cargarProgramas();
     cargarVideos();
+    configurarEventos();
+    
+    console.log('✅ Portal listo');
+});*/
+//NUEVO
+// ============================================
+// INICIALIZAR
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('🚀 Portal iniciando...');
+    
+    // ✅ 1. Inicializar Firebase (ya está arriba en el archivo)
+    // ✅ 2. Inicializar AuthService
+    AuthService.init();
+    
+    // ✅ 3. Cargar contenido
+    cargarPlanes();
+    cargarPromociones();
+    cargarProgramas();
+    cargarVideos();
+    
+    // ✅ 4. Configurar eventos
     configurarEventos();
     
     console.log('✅ Portal listo');
