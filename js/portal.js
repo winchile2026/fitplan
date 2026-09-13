@@ -187,7 +187,10 @@ window.loginPortal = async function() {
         const user = await AuthService.login(email, password);
         if (user) {
             // Redirigir al sistema según rol
-            window.location.href = 'index.html';
+            //window.location.href = 'index.html';
+            //NUEVO
+            window.location.href = 'app.html';
+            
         } else {
             error.textContent = 'Credenciales incorrectas';
         }
