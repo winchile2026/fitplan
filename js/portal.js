@@ -13,14 +13,28 @@ import { Utils } from './utils.js';
 // ============================================
 // INICIALIZAR FIREBASE
 // ============================================
-try {
+/*try {
     if (!firebase.apps.length) {
         firebase.initializeApp(FIREBASE_CONFIG);
     }
     console.log('✅ Portal: Firebase conectado');
 } catch (e) {
     console.warn('⚠️ Portal: Firebase no disponible:', e);
+}*/
+//NUEVO
+try {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(FIREBASE_CONFIG);
+    }
+    
+    // ⚠️ IMPORTANTE: Inicializar Firestore y exponerlo globalmente
+    window.db = firebase.firestore();
+    
+    console.log('✅ Portal: Firebase conectado');
+} catch (e) {
+    console.warn('⚠️ Portal: Firebase no disponible:', e);
 }
+
 
 // ============================================
 // CARGAR PLANES EN EL PORTAL
