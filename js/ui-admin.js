@@ -4,12 +4,13 @@
  * ============================================
  * Vistas completas para el rol administrador:
  * - Dashboard con tarjetas clicables
- * - Clientes con buscador y EDICIÓN
+ * - Clientes con buscador y edición
  * - Horarios con edición/eliminación
  * - Entrenadores con edición/eliminación
  * - Ofertas con edición/eliminación + detalle
  * - Pagos (ver todos con estadísticas)
  * - Pagar (como cliente)
+ * - Contabilidad (gastos del gimnasio)
  * - Historial
  */
 
@@ -30,7 +31,8 @@ export const UIAdmin = {
         { id: 'entrenadores', icon: 'fa-user-tie', label: 'Entrenadores' },
         { id: 'pagos', icon: 'fa-dollar-sign', label: 'Pagos' },
         { id: 'ofertas', icon: 'fa-tags', label: 'Ofertas' },
-        { id: 'pagar', icon: 'fa-credit-card', label: 'Pagar' }
+        { id: 'pagar', icon: 'fa-credit-card', label: 'Pagar' },
+        { id: 'contabilidad', icon: 'fa-calculator', label: 'Contabilidad' }
     ],
 
     // ============================================
@@ -49,6 +51,7 @@ export const UIAdmin = {
             case 'pagos':        this.renderPagos();          break;
             case 'ofertas':      this.renderOfertas();        break;
             case 'pagar':        this.renderPagar();          break;
+            case 'contabilidad': this.renderContabilidad();   break;
             default:
                 cont.innerHTML = `<div class="card"><h2>${tabId}</h2><p>En desarrollo...</p></div>`;
         }
@@ -483,7 +486,7 @@ export const UIAdmin = {
             </div>
         `;
 
-        /*cont.querySelectorAll('[data-accion="editar-horario"]').forEach(el => {
+        cont.querySelectorAll('[data-accion="editar-horario"]').forEach(el => {
             el.addEventListener('click', () => {
                 const i = parseInt(el.dataset.index);
                 const h = horarios[i];
@@ -497,47 +500,7 @@ export const UIAdmin = {
                 this.renderHorarios();
                 alert('✅ Actualizado');
             });
-        });*/
-        //NUEVO
-        cont.querySelectorAll('[data-accion="editar-horario"]').forEach(el => {
-    el.addEventListener('click', () => {
-        const i = parseInt(el.dataset.index);
-        const h = horarios[i];
-        const ap = prompt(`Apertura de ${h.dia}:`, h.apertura);
-        if (!ap) return;
-        const ci = prompt(`Cierre de ${h.dia}:`, h.cierre);
-        if (!ci) return;
-        horarios[i].apertura = ap;
-        horarios[i].cierre = ci;
-        StorageService.setConSync(STORAGE_KEYS.HORARIO, horarios, 'horario');  // ← CAMBIAR
-        this.renderHorarios();
-        alert('✅ Actualizado');
-    });
-});
-
-cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
-    el.addEventListener('click', () => {
-        const i = parseInt(el.dataset.index);
-        if (!confirm(`¿Eliminar horario de ${horarios[i].dia}?`)) return;
-        horarios.splice(i, 1);
-        StorageService.setConSync(STORAGE_KEYS.HORARIO, horarios, 'horario');  // ← CAMBIAR
-        this.renderHorarios();
-        alert('✅ Eliminado');
-    });
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
+        });
 
         cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
             el.addEventListener('click', () => {
@@ -588,11 +551,7 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
             const pre = parseInt(prompt('Precio:')); if (!pre) return;
             const id = entrenadores.length > 0 ? Math.max(...entrenadores.map(e => e.id)) + 1 : 1;
             entrenadores.push({ id, nombre, especialidad: esp, horario: hor, precio: pre });
-            //StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);//
-            //NUEVO
-            StorageService.setConSync(STORAGE_KEYS.ENTRENADORES, entrenadores, 'entrenadores');
-            //NUEVO
-
+            StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);
             this.renderEntrenadores();
             alert('✅ Entrenador agregado');
         });
@@ -628,11 +587,7 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
                     const es = prompt('Especialidad:', e.especialidad); if (es) e.especialidad = es;
                     const h = prompt('Horario:', e.horario); if (h) e.horario = h;
                     const p = prompt('Precio:', e.precio); if (p) e.precio = parseInt(p);
-                    //StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);//
-                    //NUEVO
-                    StorageService.setConSync(STORAGE_KEYS.ENTRENADORES, entrenadores, 'entrenadores');
-                    //NUEVO
-
+                    StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);
                     this.renderEntrenadores();
                     alert('✅ Actualizado');
                 });
@@ -642,11 +597,7 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
                     const i = parseInt(el.dataset.index);
                     if (!confirm(`¿Eliminar a ${entrenadores[i].nombre}?`)) return;
                     entrenadores.splice(i, 1);
-                    //StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);//
-                    //NUEVO
-                    StorageService.setConSync(STORAGE_KEYS.ENTRENADORES, entrenadores, 'entrenadores');
-                    //NUEVO
-                    
+                    StorageService.set(STORAGE_KEYS.ENTRENADORES, entrenadores);
                     this.renderEntrenadores();
                     alert('✅ Eliminado');
                 });
@@ -782,101 +733,6 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
     },
 
     // ============================================
-    // 7. OFERTAS (con editar/eliminar + ver detalle)
-    // ============================================
-    /*renderOfertas() {
-        const cont = document.getElementById('tabContentContainer');
-        const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
-
-        cont.innerHTML = `
-            <div class="card">
-                <h2><i class="fas fa-tags"></i> Planes y Ofertas</h2>
-                <button class="btn btn-success" id="btnAgregarOferta" style="margin-bottom:1rem;">
-                    <i class="fas fa-plus"></i> Agregar oferta
-                </button>
-                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
-                    ${ofertas.map((p, i) => `
-                        <div class="oferta-card">
-                            <div class="plan-nombre">${p.nombre}</div>
-                            <div class="precio">${Utils.formatoMoneda(p.precio)}</div>
-                            <div style="font-size:0.8rem;color:#7f8c8d;">
-                                ${(p.ejercicios || []).length} ejercicios · ${(p.comidas || []).length} comidas
-                            </div>
-                            <button class="btn-ver-detalle" data-index="${i}" data-accion="ver-detalle">
-                                <i class="fas fa-eye"></i> Ver detalles completos
-                            </button>
-                            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;justify-content:center;">
-                                <i class="fas fa-sync-alt" data-index="${i}" data-accion="editar-oferta" 
-                                   style="color:#f39c12;cursor:pointer;font-size:1.2rem;" title="Actualizar"></i>
-                                <i class="fas fa-trash" data-index="${i}" data-accion="eliminar-oferta" 
-                                   style="color:#e74c3c;cursor:pointer;font-size:1.2rem;" title="Eliminar"></i>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-
-        document.getElementById('btnAgregarOferta')?.addEventListener('click', () => {
-            const nombre = prompt('Nombre del plan:'); if (!nombre) return;
-            const precio = parseInt(prompt('Precio:')); if (!precio) return;
-            const nuevas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
-            nuevas.push({ 
-                id: 'custom-' + Date.now(), 
-                nombre, precio, 
-                ejercicios: [], comidas: [] 
-            });
-            //StorageService.set(STORAGE_KEYS.OFERTAS, nuevas);
-            //NUEVO
-            StorageService.setConSync(STORAGE_KEYS.OFERTAS, nuevas, 'ofertas');
-            //NUEVO
-
-            this.renderOfertas();
-            alert('✅ Oferta agregada');
-        });
-
-        cont.querySelectorAll('[data-accion="ver-detalle"]').forEach(el => {
-            el.addEventListener('click', () => {
-                const i = parseInt(el.dataset.index);
-                this.abrirModalDetallePlan(ofertas[i]);
-            });
-        });
-
-        cont.querySelectorAll('[data-accion="editar-oferta"]').forEach(el => {
-            el.addEventListener('click', () => {
-                const i = parseInt(el.dataset.index);
-                const p = ofertas[i];
-                const n = prompt('Nombre:', p.nombre); if (n) p.nombre = n;
-                const pr = prompt('Precio:', p.precio); if (pr) p.precio = parseInt(pr);
-                
-                //StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
-                //NUEVO
-                StorageService.setConSync(STORAGE_KEYS.OFERTAS, ofertas, 'ofertas');
-                //NUEVO
-
-                this.renderOfertas();
-                alert('✅ Oferta actualizada');
-            });
-        });
-
-        cont.querySelectorAll('[data-accion="eliminar-oferta"]').forEach(el => {
-            el.addEventListener('click', () => {
-                const i = parseInt(el.dataset.index);
-                if (!confirm(`¿Eliminar "${ofertas[i].nombre}"?`)) return;
-                ofertas.splice(i, 1);
-                
-                //StorageService.set(STORAGE_KEYS.OFERTAS, ofertas);
-                //NUEVO
-                StorageService.setConSync(STORAGE_KEYS.OFERTAS, ofertas, 'ofertas');
-                //NUEVO
-
-                this.renderOfertas();
-                alert('✅ Oferta eliminada');
-            });
-        });
-    },*/
-    //NUEVO
-        // ============================================
     // 7. OFERTAS (solo admin puede editar/eliminar)
     // ============================================
     renderOfertas() {
@@ -960,7 +816,7 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
                 alert('✅ Oferta eliminada');
             });
         });
-    },    // ← ESTA COMA ES CLAVE
+    },
 
     // ============================================
     // MODAL DETALLE DE PLAN (para admin/recepción)
@@ -1027,7 +883,6 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
         `;
         modal.classList.add('active');
     },
-   
 
     // ============================================
     // 8. PAGAR (como cliente)
@@ -1127,6 +982,246 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
     },
 
     // ============================================
+    // 9. CONTABILIDAD (solo admin)
+    // ============================================
+    renderContabilidad() {
+        const cont = document.getElementById('tabContentContainer');
+        const gastos = StorageService.get('fitGastos', []);
+
+        const mesActual = new Date().getMonth();
+        const anioActual = new Date().getFullYear();
+        
+        const gastosMes = gastos.filter(g => {
+            const fecha = new Date(g.fecha);
+            return fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual;
+        });
+        
+        const totalGastosMes = gastosMes.reduce((sum, g) => sum + g.monto, 0);
+
+        let totalIngresosMes = 0;
+        ClienteService.clientes.forEach(c => {
+            (c.pagosHistorial || []).forEach(p => {
+                const fecha = new Date(p.fecha);
+                if (fecha.getMonth() === mesActual && fecha.getFullYear() === anioActual) {
+                    totalIngresosMes += p.monto || 0;
+                }
+            });
+        });
+
+        const balance = totalIngresosMes - totalGastosMes;
+
+        cont.innerHTML = `
+            <div class="card">
+                <h2><i class="fas fa-calculator"></i> Contabilidad</h2>
+                <p style="color:#7f8c8d;margin-bottom:1rem;">Balance financiero del gimnasio</p>
+
+                <div class="dashboard-grid" style="margin-bottom:2rem;">
+                    <div class="dashboard-card" style="background:#d4edda;border-color:#27ae60;">
+                        <div class="icono" style="color:#27ae60;"><i class="fas fa-arrow-up"></i></div>
+                        <div class="numero" style="color:#155724;font-size:1.5rem;">
+                            ${Utils.formatoMoneda(totalIngresosMes)}
+                        </div>
+                        <div class="label" style="color:#155724;">Ingresos del mes</div>
+                    </div>
+                    <div class="dashboard-card rojo">
+                        <div class="icono"><i class="fas fa-arrow-down"></i></div>
+                        <div class="numero" style="font-size:1.5rem;">
+                            ${Utils.formatoMoneda(totalGastosMes)}
+                        </div>
+                        <div class="label">Gastos del mes</div>
+                    </div>
+                    <div class="dashboard-card" style="background:${balance >= 0 ? '#d4edda' : '#f8d7da'};border-color:${balance >= 0 ? '#27ae60' : '#e74c3c'};">
+                        <div class="icono" style="color:${balance >= 0 ? '#27ae60' : '#c0392b'};">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="numero" style="color:${balance >= 0 ? '#155724' : '#721c24'};font-size:1.5rem;">
+                            ${Utils.formatoMoneda(balance)}
+                        </div>
+                        <div class="label" style="color:${balance >= 0 ? '#155724' : '#721c24'};">
+                            Balance ${balance >= 0 ? 'positivo ✅' : 'negativo ⚠️'}
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1.5rem;">
+                    <button class="btn btn-success" id="btnAgregarGasto">
+                        <i class="fas fa-plus"></i> Agregar gasto
+                    </button>
+                    <button class="btn" id="btnExportarGastos" style="background:#217346;">
+                        <i class="fas fa-file-excel"></i> Exportar a Excel
+                    </button>
+                    <button class="btn btn-danger" id="btnExportarPDFGastos">
+                        <i class="fas fa-file-pdf"></i> Exportar a PDF
+                    </button>
+                </div>
+
+                <h3 style="color:#1d5a7a;margin-bottom:0.8rem;">
+                    <i class="fas fa-list"></i> Gastos registrados (${gastos.length})
+                </h3>
+                <div class="scroll-container">
+                    <table class="tabla-clientes">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Categoría</th>
+                                <th>Descripción</th>
+                                <th>Monto</th>
+                                <th>Método</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyGastos"></tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+
+        this.renderTablaGastos(gastos);
+
+        document.getElementById('btnAgregarGasto')?.addEventListener('click', () => {
+            this.abrirModalGasto();
+        });
+
+        document.getElementById('btnExportarGastos')?.addEventListener('click', () => {
+            this.exportarGastosExcel(gastos);
+        });
+
+        document.getElementById('btnExportarPDFGastos')?.addEventListener('click', () => {
+            this.exportarGastosPDF(gastos);
+        });
+    },
+
+    renderTablaGastos(gastos) {
+        const tbody = document.getElementById('tbodyGastos');
+        if (!tbody) return;
+
+        if (gastos.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:2rem;color:#7f8c8d;">No hay gastos registrados</td></tr>';
+            return;
+        }
+
+        tbody.innerHTML = gastos.slice().reverse().map(g => `
+            <tr>
+                <td>${g.fecha}</td>
+                <td><strong>${g.categoria}</strong></td>
+                <td>${g.descripcion}</td>
+                <td style="color:#e74c3c;font-weight:700;">${Utils.formatoMoneda(g.monto)}</td>
+                <td>${g.metodo}</td>
+                <td class="acciones">
+                    <i class="fas fa-edit" data-id="${g.id}" title="Editar" style="color:#f39c12;cursor:pointer;"></i>
+                    <i class="fas fa-trash" data-id="${g.id}" title="Eliminar" style="color:#e74c3c;cursor:pointer;"></i>
+                </td>
+            </tr>
+        `).join('');
+
+        tbody.querySelectorAll('.fa-trash').forEach(el => {
+            el.addEventListener('click', () => {
+                if (!confirm('¿Eliminar este gasto?')) return;
+                const id = parseInt(el.dataset.id);
+                const gastos = StorageService.get('fitGastos', []);
+                const nuevos = gastos.filter(g => g.id !== id);
+                StorageService.set('fitGastos', nuevos);
+                this.renderContabilidad();
+            });
+        });
+    },
+
+    abrirModalGasto(gastoId = null) {
+        const gastos = StorageService.get('fitGastos', []);
+        const gasto = gastoId ? gastos.find(g => g.id === gastoId) : null;
+
+        const categoria = prompt('Categoría (Arriendo, Luz, Agua, Sueldos, Mantención, Otros):', gasto ? gasto.categoria : 'Arriendo');
+        if (!categoria) return;
+
+        const descripcion = prompt('Descripción:', gasto ? gasto.descripcion : '');
+        if (descripcion === null) return;
+
+        const monto = parseInt(prompt('Monto:', gasto ? gasto.monto : 0));
+        if (!monto || monto <= 0) { alert('Monto inválido'); return; }
+
+        const metodo = prompt('Método de pago (Efectivo, Transferencia, Débito, Crédito):', gasto ? gasto.metodo : 'Efectivo');
+        if (!metodo) return;
+
+        if (gasto) {
+            gasto.categoria = categoria;
+            gasto.descripcion = descripcion;
+            gasto.monto = monto;
+            gasto.metodo = metodo;
+        } else {
+            gastos.push({
+                id: Date.now(),
+                fecha: Utils.fechaHoy(),
+                categoria,
+                descripcion,
+                monto,
+                metodo
+            });
+        }
+
+        StorageService.set('fitGastos', gastos);
+        this.renderContabilidad();
+        alert('✅ Gasto guardado');
+    },
+
+    exportarGastosExcel(gastos) {
+        if (gastos.length === 0) { alert('No hay gastos para exportar'); return; }
+        
+        const csv = 'Fecha,Categoría,Descripción,Monto,Método\n' + 
+            gastos.map(g => `${g.fecha},${g.categoria},"${g.descripcion}",${g.monto},${g.metodo}`).join('\n');
+        
+        const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `gastos-fitplan-${Utils.fechaHoy()}.csv`;
+        link.click();
+    },
+
+    exportarGastosPDF(gastos) {
+        if (gastos.length === 0) { alert('No hay gastos para exportar'); return; }
+
+        const total = gastos.reduce((sum, g) => sum + g.monto, 0);
+        const contenido = `
+            <html>
+            <head>
+                <title>Gastos FitPlan Pro</title>
+                <style>
+                    body { font-family: Arial; padding: 2rem; }
+                    h1 { color: #1d5a7a; }
+                    table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+                    th { background: #1d5a7a; color: white; padding: 0.5rem; text-align: left; }
+                    td { padding: 0.5rem; border-bottom: 1px solid #ddd; }
+                    .total { background: #f8fbfe; padding: 1rem; margin-top: 1rem; text-align: right; font-size: 1.2rem; font-weight: bold; }
+                </style>
+            </head>
+            <body>
+                <h1>💪 FitPlan Pro - Gastos</h1>
+                <p>Fecha: ${new Date().toLocaleString()}</p>
+                <table>
+                    <thead>
+                        <tr><th>Fecha</th><th>Categoría</th><th>Descripción</th><th>Monto</th><th>Método</th></tr>
+                    </thead>
+                    <tbody>
+                        ${gastos.map(g => `<tr>
+                            <td>${g.fecha}</td>
+                            <td>${g.categoria}</td>
+                            <td>${g.descripcion}</td>
+                            <td>${Utils.formatoMoneda(g.monto)}</td>
+                            <td>${g.metodo}</td>
+                        </tr>`).join('')}
+                    </tbody>
+                </table>
+                <div class="total">Total gastos: ${Utils.formatoMoneda(total)}</div>
+            </body>
+            </html>
+        `;
+
+        const v = window.open('', '_blank');
+        v.document.write(contenido);
+        v.document.close();
+        v.onload = () => v.print();
+    },
+
+    // ============================================
     // MODALES AUXILIARES
     // ============================================
     abrirModalDetalleCliente(cliente) {
@@ -1156,9 +1251,6 @@ cont.querySelectorAll('[data-accion="eliminar-horario"]').forEach(el => {
         modal.classList.add('active');
     },
 
-    // ============================================
-    // ABRIR MODAL EDITAR CLIENTE
-    // ============================================
     abrirModalEditarCliente(rut) {
         const cliente = ClienteService.buscarPorRut(rut);
         if (!cliente) { alert('Cliente no encontrado'); return; }
