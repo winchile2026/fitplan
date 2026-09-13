@@ -300,7 +300,7 @@ export const URecepcion = {
     // ============================================
     // 6. OFERTAS (con ver detalle + pagar en mesón)
     // ============================================
-    renderOfertas() {
+    /*renderOfertas() {
         const cont = document.getElementById('tabContentContainer');
         const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
 
@@ -323,7 +323,7 @@ export const URecepcion = {
                             <button class="btn-ver-detalle" data-index="${i}" data-accion="ver-detalle">
                                 <i class="fas fa-eye"></i> Ver detalles
                             </button>
-                            <button class="btn-comprar-plan" data-index="${i}" data-accion="pagar-meson">
+                                <button class="btn-comprar-plan" data-index="${i}" data-accion="pagar-meson">
                                 <i class="fas fa-cash-register"></i> Pagar en mesón
                             </button>
                         </div>
@@ -383,7 +383,54 @@ export const URecepcion = {
 
         alert(`✅ Pago registrado. Plan "${plan.nombre}" asociado a ${cliente.nombre}`);
         this.renderOfertas();
-    },
+    },*/
+    //NUEVO
+    // ============================================
+// 6. OFERTAS (solo ver, sin editar)
+// ============================================
+renderOfertas() {
+    const cont = document.getElementById('tabContentContainer');
+    const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
+
+    cont.innerHTML = `
+        <div class="card">
+            <h2><i class="fas fa-tags"></i> Planes y Ofertas</h2>
+            <p style="color:#7f8c8d;font-size:0.9rem;margin-bottom:1rem;">
+                <i class="fas fa-lock"></i> Solo lectura · Los planes se cobran en el mesón
+            </p>
+
+            <!-- Aviso -->
+            <div style="background:#e8f5e9;padding:1rem;border-radius:12px;border-left:4px solid #27ae60;margin-bottom:1rem;">
+                <p style="color:#155724;font-size:0.9rem;">
+                    <i class="fas fa-info-circle"></i>
+                    <strong>Para cobrar a un cliente:</strong> Ingresa su RUT en la opción "Pagar" del menú lateral.
+                </p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+                ${ofertas.map((p, i) => `
+                    <div class="oferta-card">
+                        <div class="plan-nombre">${p.nombre}</div>
+                        <div class="precio">${Utils.formatoMoneda(p.precio)}</div>
+                        <div style="font-size:0.8rem;color:#7f8c8d;">
+                            ${(p.ejercicios || []).length} ejercicios · ${(p.comidas || []).length} comidas
+                        </div>
+                        <button class="btn-ver-detalle" data-index="${i}" data-accion="ver-detalle">
+                            <i class="fas fa-eye"></i> Ver detalles
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    cont.querySelectorAll('[data-accion="ver-detalle"]').forEach(el => {
+        el.addEventListener('click', () => {
+            const i = parseInt(el.dataset.index);
+            UIAdmin.abrirModalDetallePlan(ofertas[i]);
+        });
+    });
+}
 
     // ============================================
     // 7. PAGAR
