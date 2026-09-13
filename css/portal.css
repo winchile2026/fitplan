@@ -1,13 +1,26 @@
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: 'Segoe UI', Roboto, sans-serif; 
+}
 
-body { background: #f0f5fa; color: #1e2a3a; }
+html { scroll-behavior: smooth; }
 
-/* NAVBAR */
+body { 
+    background: #f0f5fa; 
+    color: #1e2a3a; 
+    overflow-x: hidden;
+}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255,255,255,0.95);
+    background: rgba(255,255,255,0.98);
     backdrop-filter: blur(10px);
     padding: 1rem 2rem;
     display: flex;
@@ -23,6 +36,13 @@ body { background: #f0f5fa; color: #1e2a3a; }
     background: linear-gradient(145deg, #0b2b44, #1d5a7a);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-logo i {
+    -webkit-text-fill-color: #e67e22;
 }
 
 .nav-links {
@@ -36,6 +56,7 @@ body { background: #f0f5fa; color: #1e2a3a; }
     color: #1d5a7a;
     font-weight: 600;
     transition: color 0.3s;
+    font-size: 0.95rem;
 }
 
 .nav-links a:hover { color: #e67e22; }
@@ -49,25 +70,36 @@ body { background: #f0f5fa; color: #1e2a3a; }
     font-weight: 700;
     cursor: pointer;
     transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
 }
 
-.btn-ingresar:hover { background: #e67e22; transform: scale(1.05); }
+.btn-ingresar:hover { 
+    background: #e67e22; 
+    transform: scale(1.05); 
+}
 
-/* HERO */
+/* ============================================
+   HERO
+   ============================================ */
 .hero {
     min-height: 100vh;
     background: linear-gradient(135deg, #0b2b44 0%, #1d5a7a 100%);
     display: flex;
     align-items: center;
-    padding: 6rem 2rem 2rem;
+    padding: 8rem 2rem 4rem;
     color: white;
     position: relative;
     overflow: hidden;
+    gap: 2rem;
 }
 
 .hero-content {
     flex: 1;
     animation: fadeInLeft 1s ease;
+    min-width: 300px;
 }
 
 .hero h1 {
@@ -79,7 +111,11 @@ body { background: #f0f5fa; color: #1e2a3a; }
     -webkit-text-fill-color: transparent;
 }
 
-.hero p { font-size: 1.3rem; opacity: 0.9; margin-bottom: 2rem; }
+.hero p { 
+    font-size: 1.3rem; 
+    opacity: 0.9; 
+    margin-bottom: 2rem; 
+}
 
 .btn-hero {
     background: #e67e22;
@@ -92,36 +128,48 @@ body { background: #f0f5fa; color: #1e2a3a; }
     cursor: pointer;
     transition: 0.3s;
     box-shadow: 0 8px 20px rgba(230,126,34,0.4);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
-.btn-hero:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(230,126,34,0.6); }
+.btn-hero:hover { 
+    transform: translateY(-3px); 
+    box-shadow: 0 12px 30px rgba(230,126,34,0.6); 
+}
 
 .hero-images {
     flex: 1;
     display: flex;
     gap: 1rem;
     animation: fadeInRight 1s ease;
+    justify-content: center;
 }
 
-/* se puede cambiar las imagenes de tamaño con height y width */
 .hero-images img {
-    width: 33%;
-    height: 400px;
+    width: 30%;
+    height: 450px;
     object-fit: cover;
     border-radius: 20px;
     box-shadow: 0 20px 40px rgba(0,0,0,0.3);
     transition: transform 0.3s;
 }
 
-.hero-images img:hover { transform: scale(1.05) rotate(2deg); }
+.hero-images img:hover { 
+    transform: scale(1.05) rotate(2deg); 
+}
 
-/* INFO GYM */
+/* ============================================
+   INFO GYM
+   ============================================ */
 .info-gym {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 1.5rem;
     padding: 4rem 2rem;
     background: white;
+    max-width: 1400px;
+    margin: 0 auto;
 }
 
 .info-card {
@@ -134,30 +182,114 @@ body { background: #f0f5fa; color: #1e2a3a; }
     cursor: pointer;
 }
 
-.info-card:hover { transform: translateY(-5px); border-color: #1d5a7a; box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+.info-card:hover { 
+    transform: translateY(-5px); 
+    border-color: #1d5a7a; 
+    box-shadow: 0 15px 30px rgba(0,0,0,0.08); 
+}
 
-.info-card i { font-size: 2.5rem; color: #e67e22; margin-bottom: 1rem; }
+.info-card i { 
+    font-size: 2.5rem; 
+    color: #e67e22; 
+    margin-bottom: 1rem; 
+}
 
-/* PLANES */
-.planes-section, .programas-section, .videos-section { padding: 4rem 2rem; }
+.info-card h3 {
+    color: #0b2b44;
+    margin-bottom: 0.5rem;
+}
 
-.planes-section h2, .programas-section h2, .videos-section h2 {
+.info-card p {
+    color: #4f6b7c;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* ============================================
+   SECCIONES
+   ============================================ */
+.planes-section, 
+.programas-section, 
+.videos-section,
+.contacto-section { 
+    padding: 5rem 2rem; 
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.contacto-section {
+    background: linear-gradient(135deg, #0b2b44 0%, #1d5a7a 100%);
+    color: white;
+    max-width: 100%;
+    text-align: center;
+}
+
+.contacto-section h2 {
+    color: white !important;
+}
+
+.planes-section h2, 
+.programas-section h2, 
+.videos-section h2,
+.contacto-section h2 {
     font-size: 2.5rem;
     text-align: center;
     color: #0b2b44;
     margin-bottom: 0.5rem;
 }
 
-.subtitle { text-align: center; color: #7f8c8d; margin-bottom: 3rem; font-size: 1.1rem; }
+.subtitle { 
+    text-align: center; 
+    color: #7f8c8d; 
+    margin-bottom: 3rem; 
+    font-size: 1.1rem; 
+}
 
-.planes-grid, .promociones-grid, .programas-grid, .videos-grid {
+.contacto-section p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+}
+
+/* ============================================
+   GRIDS
+   ============================================ */
+.planes-grid, 
+.promociones-grid, 
+.programas-grid, 
+.videos-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
 }
 
+.contacto-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2rem;
+    margin: 2rem 0;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contacto-item {
+    background: rgba(255,255,255,0.1);
+    padding: 1.5rem;
+    border-radius: 16px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.contacto-item i {
+    font-size: 2rem;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================
+   PLANES CARDS
+   ============================================ */
 .plan-card-portal {
     background: white;
     border-radius: 24px;
@@ -173,18 +305,34 @@ body { background: #f0f5fa; color: #1e2a3a; }
 .plan-card-portal::before {
     content: '';
     position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 6px;
+    top: 0; 
+    left: 0;
+    width: 100%; 
+    height: 6px;
     background: linear-gradient(90deg, #e67e22, #1d5a7a);
 }
 
-.plan-card-portal:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.1); }
+.plan-card-portal:hover { 
+    transform: translateY(-10px); 
+    box-shadow: 0 25px 50px rgba(0,0,0,0.1); 
+}
 
-.plan-card-portal h3 { color: #0b2b44; font-size: 1.3rem; margin-bottom: 0.5rem; }
+.plan-card-portal h3 { 
+    color: #0b2b44; 
+    font-size: 1.3rem; 
+    margin-bottom: 0.5rem; 
+}
 
-.plan-card-portal .precio { font-size: 2.5rem; font-weight: 900; color: #1d5a7a; margin: 1rem 0; }
+.plan-card-portal .precio { 
+    font-size: 2.5rem; 
+    font-weight: 900; 
+    color: #1d5a7a; 
+    margin: 1rem 0; 
+}
 
-/* PROGRAMAS */
+/* ============================================
+   PROGRAMAS
+   ============================================ */
 .programa-card {
     background: white;
     border-radius: 24px;
@@ -193,17 +341,26 @@ body { background: #f0f5fa; color: #1e2a3a; }
     transition: all 0.3s;
 }
 
-.programa-card:hover { transform: translateY(-8px); }
+.programa-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
 
 .programa-card img {
     width: 100%;
     height: 250px;
     object-fit: cover;
+    background: #eef4f9;
 }
 
-.programa-info { padding: 1.5rem; }
+.programa-info { 
+    padding: 1.5rem; 
+}
 
-.programa-info h3 { color: #0b2b44; margin-bottom: 0.5rem; }
+.programa-info h3 { 
+    color: #0b2b44; 
+    margin-bottom: 0.5rem; 
+}
 
 .profesor {
     display: flex;
@@ -219,9 +376,12 @@ body { background: #f0f5fa; color: #1e2a3a; }
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
+    background: #eef4f9;
 }
 
-/* VIDEO */
+/* ============================================
+   VIDEOS
+   ============================================ */
 .video-card {
     background: white;
     border-radius: 20px;
@@ -231,29 +391,62 @@ body { background: #f0f5fa; color: #1e2a3a; }
     cursor: pointer;
 }
 
-.video-card:hover { transform: translateY(-8px); }
-
-.video-card iframe, .video-card img {
-    width: 100%;
-    height: 200px;
-    border: none;
-    object-fit: cover;
+.video-card:hover { 
+    transform: translateY(-8px); 
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
-/* MODAL LOGIN */
+.video-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    background: #eef4f9;
+}
+
+/* ============================================
+   BOTÓN GRANDE
+   ============================================ */
+.btn-ingresar-grande {
+    background: #e67e22;
+    color: white;
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 40px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 8px 20px rgba(230,126,34,0.4);
+}
+
+.btn-ingresar-grande:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 30px rgba(230,126,34,0.6);
+}
+
+/* ============================================
+   MODAL LOGIN
+   ============================================ */
 .modal-login {
     display: none;
     position: fixed;
     z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
+    left: 0; 
+    top: 0;
+    width: 100%; 
+    height: 100%;
     background: rgba(0,0,0,0.8);
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(5px);
 }
 
-.modal-login.active { display: flex; }
+.modal-login.active { 
+    display: flex; 
+}
 
 .modal-login .modal-content {
     background: white;
@@ -265,7 +458,11 @@ body { background: #f0f5fa; color: #1e2a3a; }
     position: relative;
 }
 
-.modal-login h2 { text-align: center; color: #1d5a7a; margin-bottom: 1.5rem; }
+.modal-login h2 { 
+    text-align: center; 
+    color: #1d5a7a; 
+    margin-bottom: 1.5rem; 
+}
 
 .modal-login input {
     width: 100%;
@@ -274,6 +471,12 @@ body { background: #f0f5fa; color: #1e2a3a; }
     border: 2px solid #dce5ed;
     margin-bottom: 1rem;
     font-size: 0.95rem;
+    outline: none;
+    transition: border 0.3s;
+}
+
+.modal-login input:focus {
+    border-color: #1d5a7a;
 }
 
 .modal-login .btn {
@@ -285,21 +488,126 @@ body { background: #f0f5fa; color: #1e2a3a; }
     border-radius: 40px;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.3s;
+}
+
+.modal-login .btn:hover {
+    background: #e67e22;
 }
 
 .modal-login .close {
     position: absolute;
-    top: 1rem; right: 1rem;
+    top: 1rem; 
+    right: 1rem;
     background: #e74c3c;
     color: white;
     border: none;
-    width: 30px; height: 30px;
+    width: 30px; 
+    height: 30px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 1.2rem;
+    transition: 0.3s;
 }
 
-/* ANIMACIONES */
-@keyframes fadeInLeft { from { opacity: 0; transform: translateX(-50px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes fadeInRight { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes zoomIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+.modal-login .close:hover {
+    transform: scale(1.1);
+    background: #c0392b;
+}
+
+.error-msg {
+    color: #e74c3c;
+    text-align: center;
+    font-size: 0.85rem;
+    min-height: 20px;
+    margin-bottom: 0.5rem;
+}
+
+.hint {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 0.85rem;
+    color: #7f8c8d;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer {
+    background: #0b2b44;
+    color: white;
+    text-align: center;
+    padding: 2rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* ============================================
+   ANIMACIONES
+   ============================================ */
+@keyframes fadeInLeft { 
+    from { opacity: 0; transform: translateX(-50px); } 
+    to { opacity: 1; transform: translateX(0); } 
+}
+
+@keyframes fadeInRight { 
+    from { opacity: 0; transform: translateX(50px); } 
+    to { opacity: 1; transform: translateX(0); } 
+}
+
+@keyframes zoomIn { 
+    from { opacity: 0; transform: scale(0.8); } 
+    to { opacity: 1; transform: scale(1); } 
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 900px) {
+    .hero {
+        flex-direction: column;
+        padding: 7rem 1.5rem 3rem;
+    }
+    
+    .hero h1 { font-size: 2.2rem; }
+    .hero p { font-size: 1rem; }
+    
+    .hero-images {
+        width: 100%;
+        height: auto;
+        margin-top: 2rem;
+    }
+    
+    .hero-images img {
+        width: 33%;
+        height: 250px;
+    }
+    
+    .nav-links a {
+        display: none;
+    }
+    
+    .nav-links .btn-ingresar {
+        display: inline-flex;
+    }
+    
+    .planes-section h2, 
+    .programas-section h2, 
+    .videos-section h2,
+    .contacto-section h2 {
+        font-size: 1.8rem;
+    }
+    
+    .planes-grid, 
+    .promociones-grid, 
+    .programas-grid, 
+    .videos-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+    .hero h1 { font-size: 1.6rem; }
+    .hero-images img { height: 150px; }
+    .plan-card-portal .precio { font-size: 1.8rem; }
+}
