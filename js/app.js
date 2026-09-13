@@ -158,10 +158,16 @@ function configurarLogin() {
     inputEmail?.addEventListener('keyup', e => { if (e.key === 'Enter') btnLogin.click(); });
     inputPass?.addEventListener('keyup', e => { if (e.key === 'Enter') btnLogin.click(); });
 
-    document.getElementById('btnLogout')?.addEventListener('click', async () => {
+    /*document.getElementById('btnLogout')?.addEventListener('click', async () => {
         await AuthService.logout();
         location.reload();
-    });
+    });*/
+    //NUEVO
+    document.getElementById('btnLogout')?.addEventListener('click', async () => {
+    await AuthService.logout();
+    window.location.href = 'index.html';  // ← Volver al portal público
+});
+    
 }
 
 function configurarRegistro() {
