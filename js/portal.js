@@ -5,10 +5,10 @@
  * Página de inicio pública con información del gimnasio.
  */
 
-import { BASE_PLANES } from './data.js';
+/*import { BASE_PLANES } from './data.js';
 import { AuthService } from './services.js';
 import { FIREBASE_CONFIG } from './config.js';
-import { Utils } from './utils.js';
+import { Utils } from './utils.js';*/
 
 // ============================================
 // INICIALIZAR FIREBASE
@@ -22,15 +22,29 @@ import { Utils } from './utils.js';
     console.warn('⚠️ Portal: Firebase no disponible:', e);
 }*/
 //NUEVO
+/**
+ * ============================================
+ * PORTAL PÚBLICO - FitPlan Pro
+ * ============================================
+ */
+
+import { BASE_PLANES } from './data.js';
+import { AuthService } from './services.js';
+import { FIREBASE_CONFIG } from './config.js';
+import { Utils } from './utils.js';
+
+// ============================================
+// INICIALIZAR FIREBASE + FIRESTORE
+// ============================================
 try {
     if (!firebase.apps.length) {
         firebase.initializeApp(FIREBASE_CONFIG);
     }
     
-    // ⚠️ IMPORTANTE: Inicializar Firestore y exponerlo globalmente
+    // ⚠️ CRÍTICO: Exponer db globalmente para que AuthService lo use
     window.db = firebase.firestore();
     
-    console.log('✅ Portal: Firebase conectado');
+    console.log('✅ Portal: Firebase + Firestore conectados');
 } catch (e) {
     console.warn('⚠️ Portal: Firebase no disponible:', e);
 }
