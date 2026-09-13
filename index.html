@@ -154,7 +154,7 @@
     <!-- ============================ -->
     <!-- MODAL DE LOGIN               -->
     <!-- ============================ -->
-    <div id="modalLogin" class="modal-login">
+    <!--<div id="modalLogin" class="modal-login">
         <div class="modal-content">
             <button class="close" id="btnCerrarModal">&times;</button>
             <h2>Iniciar sesión</h2>
@@ -166,7 +166,52 @@
             </button>
             <p class="hint">¿No tienes cuenta? <a href="app.html" style="color:#1d5a7a;font-weight:700;">Regístrate aquí</a></p>
         </div>
+    </div>-->
+    <!--NUEVO-->
+    <div id="modalLogin" class="modal-login">
+    <div class="modal-content">
+        <button class="close" id="btnCerrarModal">&times;</button>
+
+        <!-- TABS Login/Registro -->
+        <div class="auth-tabs" style="display:flex;gap:0.3rem;background:#f0f5fa;padding:0.3rem;border-radius:40px;margin-bottom:1.5rem;">
+            <button class="auth-tab active" data-portal-tab="login" 
+                    style="flex:1;background:#1d5a7a;color:white;border:none;padding:0.6rem 1rem;border-radius:40px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-sign-in-alt"></i> Ingresar
+            </button>
+            <button class="auth-tab" data-portal-tab="registro"
+                    style="flex:1;background:transparent;color:#1d5a7a;border:none;padding:0.6rem 1rem;border-radius:40px;font-weight:700;cursor:pointer;">
+                <i class="fas fa-user-plus"></i> Crear cuenta
+            </button>
+        </div>
+
+        <!-- Panel Login -->
+        <div id="panelLogin">
+            <input type="email" id="portalEmail" placeholder="tu-email@ejemplo.com">
+            <input type="password" id="portalPass" placeholder="Contraseña">
+            <div id="portalError" class="error-msg"></div>
+            <button class="btn" id="btnLoginPortal">
+                <i class="fas fa-sign-in-alt"></i> Ingresar
+            </button>
+        </div>
+
+        <!-- Panel Registro -->
+        <div id="panelRegistro" style="display:none;">
+            <input type="text" id="regPortalNombre" placeholder="Nombre completo">
+            <input type="text" id="regPortalRut" placeholder="RUT (12.345.678-9)">
+            <input type="email" id="regPortalEmail" placeholder="tu-email@ejemplo.com">
+            <input type="password" id="regPortalPass" placeholder="Contraseña (mín. 6 caracteres)">
+            <input type="password" id="regPortalPass2" placeholder="Repetir contraseña">
+            <div id="registroPortalError" class="error-msg"></div>
+            <div id="registroPortalExito" style="display:none;background:#d4edda;color:#155724;padding:0.8rem;border-radius:12px;font-size:0.85rem;text-align:center;margin-bottom:0.5rem;">
+                <i class="fas fa-check-circle"></i> ¡Cuenta creada! Ya puedes iniciar sesión.
+            </div>
+            <button class="btn btn-success" id="btnRegistrarPortal" style="width:100%;">
+                <i class="fas fa-user-plus"></i> Crear Cuenta
+            </button>
+        </div>
     </div>
+</div>
+    
 
     <!-- ============================ -->
     <!-- SCRIPTS (Firebase primero)   -->
