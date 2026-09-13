@@ -430,7 +430,7 @@ renderOfertas() {
             UIAdmin.abrirModalDetallePlan(ofertas[i]);
         });
     });
-}
+},
 
     // ============================================
     // 7. PAGAR
