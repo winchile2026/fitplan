@@ -230,7 +230,7 @@ function cerrarLogin() {
     document.getElementById('modalLogin').classList.remove('active');
 }
 
-async function loginPortal() {
+/*async function loginPortal() {
     const email = document.getElementById('portalEmail').value.trim();
     const password = document.getElementById('portalPass').value;
     const error = document.getElementById('portalError');
@@ -253,6 +253,43 @@ async function loginPortal() {
     } catch (e) {
         console.error('Error login:', e);
         error.textContent = 'Error al iniciar sesión';
+    }
+}*/
+//NUEVO
+async function loginPortal() {
+    const email = document.getElementById('portalEmail').value.trim();
+    const password = document.getElementById('portalPass').value;
+    const error = document.getElementById('portalError');
+    const btn = document.getElementById('btnLoginPortal');
+
+    error.textContent = '';
+
+    if (!email || !password) {
+        error.textContent = 'Ingresa email y contraseña';
+        return;
+    }
+
+    // Deshabilitar botón
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Ingresando...';
+
+    try {
+        const user = await AuthService.login(email, password);
+        
+        if (user) {
+            console.log('✅ Login exitoso:', user.rol);
+            // Redirigir según rol directamente a la app
+            window.location.href = 'app.html';
+        } else {
+            error.textContent = 'Email o contraseña incorrectos';
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
+        }
+    } catch (e) {
+        console.error('Error login:', e);
+        error.textContent = 'Error al iniciar sesión';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Ingresar';
     }
 }
 
