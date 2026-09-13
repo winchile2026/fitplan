@@ -22,7 +22,7 @@
             <a href="#programas">Programas</a>
             <a href="#videos">Ejercicios</a>
             <a href="#contacto">Contacto</a>
-            <button class="btn-ingresar" onclick="abrirLogin()">
+            <button class="btn-ingresar" id="btnIngresarNav">
                 <i class="fas fa-sign-in-alt"></i> Ingresar
             </button>
         </div>
@@ -35,21 +35,14 @@
         <div class="hero-content">
             <h1>Transforma tu cuerpo,<br>transforma tu vida 💪</h1>
             <p>Únete al gimnasio más completo de la ciudad</p>
-            <button class="btn-hero" onclick="scrollToPlanes()">
+            <button class="btn-hero" id="btnVerPlanes">
                 <i class="fas fa-arrow-down"></i> Ver planes
             </button>
         </div>
-        <!--<div class="hero-images">
-            <img src="assets/gym1.jpg" alt="Gimnasio">
-            <img src="assets/gym2.jpg" alt="Entrenamiento">
-            <img src="assets/gym3.jpg" alt="Ejercicios">
-        </div>-->
-
-        <!--NUEVO-->
         <div class="hero-images">
-            <img src="assets/gym/banner-1.jpg" alt="Gimnasio">
-            <img src="assets/gym/banner-2.jpg" alt="Entrenamiento">
-            <img src="assets/gym/banner-3.jpg" alt="Ejercicios">
+            <img src="assets/gym/banner-1.jpg" alt="Gimnasio" onerror="this.style.display='none'">
+            <img src="assets/gym/banner-2.jpg" alt="Entrenamiento" onerror="this.style.display='none'">
+            <img src="assets/gym/banner-3.jpg" alt="Ejercicios" onerror="this.style.display='none'">
         </div>
     </section>
 
@@ -57,20 +50,11 @@
     <!-- INFO DEL GIMNASIO            -->
     <!-- ============================ -->
     <section class="info-gym">
-        <!--<div class="info-card">
+        <div class="info-card">
             <i class="fas fa-map-marker-alt"></i>
             <h3>Dirección</h3>
-            <p>Av. Siempre Viva 742<br>Santiago, Chile</p>
-        </div>-->
-
-        <!--NUEVO-->
-        <div class="info-card">
-    <i class="fas fa-map-marker-alt"></i>
-    <h3>Dirección</h3>
-    <p>Av. Prueba 1234<br>Santiago, Chile</p>
-</div>
-
-
+            <p>Av. Providencia 1234<br>Santiago, Chile</p>
+        </div>
         <div class="info-card">
             <i class="fas fa-clock"></i>
             <h3>Horarios</h3>
@@ -79,7 +63,7 @@
         <div class="info-card">
             <i class="fas fa-phone"></i>
             <h3>Contacto</h3>
-            <p>+56 9 1234 9999<br>info@fitplanpro.cl</p>
+            <p>+56 9 1234 5678<br>info@fitplanpro.cl</p>
         </div>
         <div class="info-card">
             <i class="fas fa-users"></i>
@@ -95,15 +79,15 @@
         <h2>Nuestros Planes</h2>
         <p class="subtitle">Elige el plan que se adapte a ti</p>
         <div class="planes-grid" id="planesGrid">
-            <!-- Se llenan dinámicamente desde portal.js -->
+            <div style="grid-column:1/-1;text-align:center;color:#7f8c8d;padding:2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i>
+                <p>Cargando planes...</p>
+            </div>
         </div>
 
-        <!-- Promociones especiales -->
-        <div class="promociones">
+        <div class="promociones" style="margin-top:4rem;">
             <h2>🎉 Promociones</h2>
-            <div class="promociones-grid" id="promocionesGrid">
-                <!-- Se llenan desde portal.js -->
-            </div>
+            <div class="promociones-grid" id="promocionesGrid"></div>
         </div>
     </section>
 
@@ -114,7 +98,10 @@
         <h2>Nuestros Programas</h2>
         <p class="subtitle">Clases dirigidas por profesionales</p>
         <div class="programas-grid" id="programasGrid">
-            <!-- Se llenan desde portal.js -->
+            <div style="grid-column:1/-1;text-align:center;color:#7f8c8d;padding:2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i>
+                <p>Cargando programas...</p>
+            </div>
         </div>
     </section>
 
@@ -125,7 +112,10 @@
         <h2>Ejercicios en Video</h2>
         <p class="subtitle">Aprende la técnica correcta</p>
         <div class="videos-grid" id="videosGrid">
-            <!-- Se llenan desde portal.js -->
+            <div style="grid-column:1/-1;text-align:center;color:#7f8c8d;padding:2rem;">
+                <i class="fas fa-spinner fa-spin" style="font-size:2rem;"></i>
+                <p>Cargando videos...</p>
+            </div>
         </div>
     </section>
 
@@ -138,7 +128,7 @@
         <div class="contacto-grid">
             <div class="contacto-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <p>Av. Siempre Viva 742, Santiago</p>
+                <p>Av. Providencia 1234, Santiago</p>
             </div>
             <div class="contacto-item">
                 <i class="fas fa-phone"></i>
@@ -149,7 +139,7 @@
                 <p>info@fitplanpro.cl</p>
             </div>
         </div>
-        <button class="btn-ingresar-grande" onclick="abrirLogin()">
+        <button class="btn-ingresar-grande" id="btnIngresarGrande">
             <i class="fas fa-sign-in-alt"></i> Ya soy socio — Ingresar
         </button>
     </section>
@@ -166,18 +156,25 @@
     <!-- ============================ -->
     <div id="modalLogin" class="modal-login">
         <div class="modal-content">
-            <button class="close" onclick="cerrarLogin()">&times;</button>
+            <button class="close" id="btnCerrarModal">&times;</button>
             <h2>Iniciar sesión</h2>
             <input type="email" id="portalEmail" placeholder="tu-email@ejemplo.com">
             <input type="password" id="portalPass" placeholder="Contraseña">
             <div id="portalError" class="error-msg"></div>
-            <button class="btn" onclick="loginPortal()">
+            <button class="btn" id="btnLoginPortal">
                 <i class="fas fa-sign-in-alt"></i> Ingresar
             </button>
-            <p class="hint">¿No tienes cuenta? <a href="#" onclick="abrirRegistro()">Regístrate aquí</a></p>
+            <p class="hint">¿No tienes cuenta? <a href="app.html" style="color:#1d5a7a;font-weight:700;">Regístrate aquí</a></p>
         </div>
     </div>
 
+    <!-- ============================ -->
+    <!-- SCRIPTS (Firebase primero)   -->
+    <!-- ============================ -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    
     <script type="module" src="js/portal.js"></script>
 </body>
 </html>
