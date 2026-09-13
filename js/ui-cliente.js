@@ -23,8 +23,8 @@ export const UICliente = {
         { id: 'cliente', icon: 'fa-user', label: 'Mi plan' },
         { id: 'horarios', icon: 'fa-clock', label: 'Horarios' },
         { id: 'entrenadores', icon: 'fa-user-tie', label: 'Entrenadores' },
-        { id: 'ofertas', icon: 'fa-tags', label: 'Ofertas' },
-        { id: 'pagar', icon: 'fa-credit-card', label: 'Pagar', clase: 'pagar-cliente' }
+        { id: 'ofertas', icon: 'fa-tags', label: 'Ofertas' }
+        //{ id: 'pagar', icon: 'fa-credit-card', label: 'Pagar', clase: 'pagar-cliente' } /se elimina ya que cliente no debe tener opcion de pago//
     ],
 
     ofertaSeleccionadaTemp: null,
@@ -38,7 +38,7 @@ export const UICliente = {
             case 'horarios':     this.renderHorarios();       break;
             case 'entrenadores': this.renderEntrenadores();   break;
             case 'ofertas':      this.renderOfertas();        break;
-            case 'pagar':        this.renderPagar(rut);       break;
+            //case 'pagar':        this.renderPagar(rut);       break; /se elimina ya que cliente no debe tener opcion de pago//
         }
     },
 
@@ -424,7 +424,7 @@ export const UICliente = {
     // ============================================
     // 4. OFERTAS (con ver detalle + comprar)
     // ============================================
-    renderOfertas() {
+    /*renderOfertas() {
         const cont = document.getElementById('tabContentContainer');
         const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
 
@@ -465,12 +465,69 @@ export const UICliente = {
                 this.seleccionarPlan(btn.dataset.planId);
             });
         });
-    },
+    },*/
 
+    //NUEVO
+    // ============================================
+// 4. OFERTAS (solo ver, sin comprar online)
+// ============================================
+renderOfertas() {
+    const cont = document.getElementById('tabContentContainer');
+    const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
+
+    cont.innerHTML = `
+        <div class="card">
+            <h2><i class="fas fa-tags"></i> Planes disponibles</h2>
+
+            <!-- Aviso de compra en sucursal -->
+            <div style="background:linear-gradient(135deg,#fff3cd 0%,#ffe8a1 100%);padding:1.5rem;border-radius:16px;border-left:4px solid #f39c12;margin-bottom:1.5rem;">
+                <h3 style="color:#856404;margin-bottom:0.5rem;">
+                    <i class="fas fa-store"></i> Compra presencial
+                </h3>
+                <p style="color:#856404;font-size:0.95rem;">
+                    Todos los planes se compran <strong>presencialmente en recepción</strong>.
+                    Acércate a nuestra sucursal para activar tu plan.
+                </p>
+                <p style="color:#856404;font-size:0.85rem;margin-top:0.5rem;">
+                    <i class="fas fa-map-marker-alt"></i> 
+                    Av. Providencia 1234, Santiago · 
+                    <i class="fas fa-phone"></i> +56 9 1234 5678
+                </p>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;">
+                ${ofertas.map(p => `
+                    <div class="oferta-card">
+                        <div class="plan-nombre">${p.nombre}</div>
+                        <div class="precio">${Utils.formatoMoneda(p.precio)}</div>
+                        <div style="font-size:0.8rem;color:#7f8c8d;">
+                            ${(p.ejercicios || []).length} ejercicios · ${(p.comidas || []).length} comidas
+                        </div>
+                        <button class="btn-ver-detalle" data-plan-id="${p.id}" data-accion="ver-detalle">
+                            <i class="fas fa-eye"></i> Ver ejercicios y comidas
+                        </button>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+
+    // Ver detalle (sin opción de comprar)
+    cont.querySelectorAll('[data-accion="ver-detalle"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const planId = btn.dataset.planId;
+            const plan = ofertas.find(p => p.id === planId) || BASE_PLANES[planId];
+            if (plan) this.abrirModalDetallePlanCliente(plan);
+        });
+    });
+}
+
+
+    
     // ============================================
     // MODAL DETALLE PLAN (para cliente)
     // ============================================
-    abrirModalDetallePlanCliente(plan) {
+    /*abrirModalDetallePlanCliente(plan) {
         const modal = document.getElementById('modalPlan');
         const cont = document.getElementById('modalPlanContenido');
         if (!modal || !cont) return;
@@ -537,12 +594,86 @@ export const UICliente = {
             </button>
         `;
         modal.classList.add('active');
-    },
+    },*/
+    //NUEVO
+    abrirModalDetallePlanCliente(plan) {
+    const modal = document.getElementById('modalPlan');
+    const cont = document.getElementById('modalPlanContenido');
+    if (!modal || !cont) return;
 
+    const ejercicios = plan.ejercicios || [];
+    const comidas = plan.comidas || [];
+
+    cont.innerHTML = `
+        <div class="modal-header-plan">
+            <div class="icono-plan-modal">
+                <i class="fas fa-dumbbell"></i>
+            </div>
+            <div>
+                <h3>${plan.nombre}</h3>
+                <div class="precio-modal">${Utils.formatoMoneda(plan.precio)}</div>
+            </div>
+        </div>
+
+        <h4><i class="fas fa-dumbbell"></i> Ejercicios (${ejercicios.length})</h4>
+        ${ejercicios.length === 0 
+            ? '<p style="color:#7f8c8d;text-align:center;padding:1rem;">Sin ejercicios</p>'
+            : `
+                <div class="lista-ejercicios-modal">
+                    ${ejercicios.map(ej => `
+                        <div class="ejercicio-modal">
+                            <img src="${ej.img}" alt="${ej.nombre}" onerror="this.style.display='none'">
+                            <div class="info-ej-modal">
+                                <span class="nombre-ej">${ej.nombre}</span>
+                                <span class="detalle-ej">${ej.detalle}</span>
+                            </div>
+                            <span class="repeticiones-badge">${ej.repeticiones}</span>
+                            <span class="btn-youtube-modal" 
+                                  onclick="window.open('${ej.youtube || 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ej.nombre)}', '_blank')"
+                                  title="Ver en YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        }
+
+        <h4><i class="fas fa-utensils"></i> Comidas (${comidas.length})</h4>
+        ${comidas.length === 0 
+            ? '<p style="color:#7f8c8d;text-align:center;padding:1rem;">Sin comidas</p>'
+            : `
+                <div class="lista-comidas-modal">
+                    ${comidas.map(c => `
+                        <div class="comida-modal">
+                            <span class="nombre-comida">
+                                <i class="fas fa-utensils"></i> ${c.nombre}
+                            </span>
+                            <div class="detalle-comida">${c.detalle}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        }
+
+        <!-- Aviso de compra en sucursal -->
+        <div style="background:#fff3cd;padding:1rem;border-radius:12px;margin-top:1.5rem;border-left:4px solid #f39c12;text-align:center;">
+            <p style="color:#856404;font-weight:700;margin-bottom:0.3rem;">
+                <i class="fas fa-store"></i> Compra este plan en recepción
+            </p>
+            <p style="color:#856404;font-size:0.85rem;">
+                Av. Providencia 1234, Santiago · +56 9 1234 5678
+            </p>
+        </div>
+    `;
+    modal.classList.add('active');
+}
+
+    
     // ============================================
     // SELECCIONAR PLAN
     // ============================================
-    seleccionarPlan(planId) {
+    /*seleccionarPlan(planId) {
         const ofertas = StorageService.get(STORAGE_KEYS.OFERTAS, Object.values(BASE_PLANES));
         const plan = ofertas.find(p => p.id === planId) || BASE_PLANES[planId];
         if (!plan) { alert('Plan no encontrado'); return; }
@@ -555,12 +686,12 @@ export const UICliente = {
 
         document.querySelector('.tab-btn[data-tab="pagar"]')?.click();
         alert(`Plan "${plan.nombre}" seleccionado. Procede con el pago.`);
-    },
+    },*/
 
     // ============================================
     // 5. PAGAR
     // ============================================
-    renderPagar(rut) {
+    /*renderPagar(rut) {
         const cont = document.getElementById('tabContentContainer');
         const cliente = ClienteService.buscarPorRut(rut);
         if (!cliente) return;
@@ -641,12 +772,12 @@ export const UICliente = {
         `;
 
         this.conectarPagar(rut);
-    },
+    },*/
 
     // ============================================
     // CONECTAR EVENTOS PAGAR
     // ============================================
-    conectarPagar(rut) {
+    /*conectarPagar(rut) {
         document.querySelectorAll('#metodosPagoCliente .metodo-pago').forEach(el => {
             el.addEventListener('click', () => {
                 document.querySelectorAll('#metodosPagoCliente .metodo-pago').forEach(m => m.classList.remove('seleccionado'));
@@ -661,12 +792,12 @@ export const UICliente = {
         document.getElementById('btnLimpiarPagoCliente')?.addEventListener('click', () => {
             this.limpiarPago(rut);
         });
-    },
+    },*/
 
     // ============================================
     // CONFIRMAR PAGO
     // ============================================
-    confirmarPago(rut) {
+    /*confirmarPago(rut) {
         const cliente = ClienteService.buscarPorRut(rut);
         if (!cliente) return;
 
@@ -711,4 +842,4 @@ export const UICliente = {
         this.ofertaSeleccionadaTemp = null;
         this.renderPagar(rut);
     }
-};
+};*/
