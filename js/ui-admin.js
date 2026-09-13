@@ -970,7 +970,7 @@ renderOfertas() {
     // ============================================
     // MODAL DETALLE DE PLAN (reutilizable)
     // ============================================
-    abrirModalDetallePlan(plan) {
+    /*abrirModalDetallePlan(plan) {
         const modal = document.getElementById('modalPlan');
         const cont = document.getElementById('modalPlanContenido');
         if (!modal || !cont) return;
@@ -1031,7 +1031,80 @@ renderOfertas() {
             }
         `;
         modal.classList.add('active');
-    },
+    },*/
+    //NUEVO
+    abrirModalDetallePlanCliente(plan) {
+    const modal = document.getElementById('modalPlan');
+    const cont = document.getElementById('modalPlanContenido');
+    if (!modal || !cont) return;
+
+    const ejercicios = plan.ejercicios || [];
+    const comidas = plan.comidas || [];
+
+    cont.innerHTML = `
+        <div class="modal-header-plan">
+            <div class="icono-plan-modal">
+                <i class="fas fa-dumbbell"></i>
+            </div>
+            <div>
+                <h3>${plan.nombre}</h3>
+                <div class="precio-modal">${Utils.formatoMoneda(plan.precio)}</div>
+            </div>
+        </div>
+
+        <h4><i class="fas fa-dumbbell"></i> Ejercicios (${ejercicios.length})</h4>
+        ${ejercicios.length === 0 
+            ? '<p style="color:#7f8c8d;text-align:center;padding:1rem;">Sin ejercicios</p>'
+            : `
+                <div class="lista-ejercicios-modal">
+                    ${ejercicios.map(ej => `
+                        <div class="ejercicio-modal">
+                            <img src="${ej.img}" alt="${ej.nombre}" onerror="this.style.display='none'">
+                            <div class="info-ej-modal">
+                                <span class="nombre-ej">${ej.nombre}</span>
+                                <span class="detalle-ej">${ej.detalle}</span>
+                            </div>
+                            <span class="repeticiones-badge">${ej.repeticiones}</span>
+                            <span class="btn-youtube-modal" 
+                                  onclick="window.open('${ej.youtube || 'https://www.youtube.com/results?search_query=' + encodeURIComponent(ej.nombre)}', '_blank')"
+                                  title="Ver en YouTube">
+                                <i class="fab fa-youtube"></i>
+                            </span>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        }
+
+        <h4><i class="fas fa-utensils"></i> Comidas (${comidas.length})</h4>
+        ${comidas.length === 0 
+            ? '<p style="color:#7f8c8d;text-align:center;padding:1rem;">Sin comidas</p>'
+            : `
+                <div class="lista-comidas-modal">
+                    ${comidas.map(c => `
+                        <div class="comida-modal">
+                            <span class="nombre-comida">
+                                <i class="fas fa-utensils"></i> ${c.nombre}
+                            </span>
+                            <div class="detalle-comida">${c.detalle}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `
+        }
+
+        <!-- Aviso de compra en sucursal -->
+        <div style="background:#fff3cd;padding:1rem;border-radius:12px;margin-top:1.5rem;border-left:4px solid #f39c12;text-align:center;">
+            <p style="color:#856404;font-weight:700;margin-bottom:0.3rem;">
+                <i class="fas fa-store"></i> Compra este plan en recepción
+            </p>
+            <p style="color:#856404;font-size:0.85rem;">
+                Av. Providencia 1234, Santiago · +56 9 1234 5678
+            </p>
+        </div>
+    `;
+    modal.classList.add('active');
+}
 
     // ============================================
     // 8. PAGAR (como cliente)
