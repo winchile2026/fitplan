@@ -357,9 +357,107 @@ document.addEventListener('DOMContentLoaded', () => {
     cargarPromociones();
     cargarProgramas();
     cargarVideos();
+    //NUEVO
+    configurarEventos();           // ← NUEVO
+    configurarTabsAuth();          // ← NUEVO
+    configurarRegistroPortal();    // ← NUEVO
     
     // ✅ Configurar eventos
     configurarEventos();
     
     console.log('✅ Portal listo');
 });
+
+
+//NUEVO
+// ============================================
+// REGISTRO DE NUEVOS CLIENTES DESDE EL PORTAL
+// ============================================
+function configurarTabsAuth() {
+    document.querySelectorAll('[data-portal-tab]').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('[data-portal-tab]').forEach(t => {
+                t.classList.remove('active');
+                t.style.background = 'transparent';
+                t.style.color = '#1d5a7a';
+            });
+            tab.classList.add('active');
+            tab.style.background = '#1d5a7a';
+            tab.style.color = 'white';
+
+            const tabName = tab.dataset.portalTab;
+            document.getElementById('panelLogin').style.display = tabName === 'login' ? 'block' : 'none';
+            document.getElementById('panelRegistro').style.display = tabName === 'registro' ? 'block' : 'none';
+        });
+    });
+}
+
+function configurarRegistroPortal() {
+    document.getElementById('btnRegistrarPortal')?.addEventListener('click', async () => {
+        const nombre = document.getElementById('regPortalNombre').value.trim();
+        const rut = document.getElementById('regPortalRut').value.trim();
+        const email = document.getElementById('regPortalEmail').value.trim();
+        const password = document.getElementById('regPortalPass').value;
+        const password2 = document.getElementById('regPortalPass2').value;
+        const errorMsg = document.getElementById('registroPortalError');
+        const exitoMsg = document.getElementById('registroPortalExito');
+        const btn = document.getElementById('btnRegistrarPortal');
+
+        errorMsg.textContent = '';
+        exitoMsg.style.display = 'none';
+
+        // Validaciones
+        if (!nombre) { errorMsg.textContent = 'Ingresa tu nombre'; return; }
+        if (!rut) { errorMsg.textContent = 'Ingresa tu RUT'; return; }
+        if (!email) { errorMsg.textContent = 'Ingresa tu email'; return; }
+        if (password.length < 6) { errorMsg.textContent = 'Contraseña mínimo 6 caracteres'; return; }
+        if (password !== password2) { errorMsg.textContent = 'Las contraseñas no coinciden'; return; }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Creando...';
+
+        try {
+            const resultado = await AuthService.registro(email, password, { nombre, rut });
+
+            if (resultado.exito) {
+                exitoMsg.style.display = 'block';
+
+                // Registrar en la base de clientes
+                const { ClienteService, HistorialService } = await import('./services.js');
+                if (!ClienteService.buscarPorRut(rut)) {
+                    ClienteService.crear({
+                        rut: rut,
+                        nombre: nombre,
+                        telefono: '',
+                        email: email,
+                        edad: 30,
+                        problema: 'Ninguno'
+                    });
+                    HistorialService.agregar('Cliente auto-registrado', rut, nombre, `Email: ${email}`);
+                }
+
+                // Limpiar campos
+                document.getElementById('regPortalNombre').value = '';
+                document.getElementById('regPortalRut').value = '';
+                document.getElementById('regPortalEmail').value = '';
+                document.getElementById('regPortalPass').value = '';
+                document.getElementById('regPortalPass2').value = '';
+
+                // Volver al login después de 2 segundos
+                setTimeout(() => {
+                    document.querySelector('[data-portal-tab="login"]')?.click();
+                    document.getElementById('portalEmail').value = email;
+                    document.getElementById('portalPass').focus();
+                }, 2000);
+            } else {
+                errorMsg.textContent = resultado.error;
+            }
+        } catch (e) {
+            console.error('Error registro:', e);
+            errorMsg.textContent = 'Error al crear la cuenta';
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-user-plus"></i> Crear Cuenta';
+    });
+}
